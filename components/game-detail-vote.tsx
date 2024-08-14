@@ -33,10 +33,7 @@ export function GameDetailVote() {
   return (
     <Card className="mx-auto w-full max-w-sm max-h-auto bg-white text-black">
       <CardHeader>
-        <CardTitle>Current Info</CardTitle>
-        <CardDescription>
-          Can you predict the outcome of the next Wise and Weird event?
-        </CardDescription>
+        <CardTitle className="text-lg">Current Info</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4">
         {/* <div className="flex items-center">Total $50k</div>

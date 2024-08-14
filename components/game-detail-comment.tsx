@@ -11,10 +11,14 @@ export const GameDetailComment = () => {
       <div className="flex items-center space-x-2">
         <Label>Description</Label>
         <Input id="description" placeholder="Please leave a comment." />
-        <Button size="sm" className="bg-lime-700">
+        <Button
+          className="bg-lime-700 bg-[#00A29A] text-white w-200 h-110 object-contain cursor-pointer active:bg-[#66C2B8] transition-transform duration-75 active:scale-95 hover:bg-[#00A29A]"
+        >
           Up
         </Button>
-        <Button size="sm" className="bg-rose-700">
+        <Button
+          className="bg-rose-700 bg-[#C73535] text-white w-200 h-110 object-contain cursor-pointer active:bg-[#E57373] transition-transform duration-75 active:scale-95 hover:bg-[#C73535]"
+        >
           Down
         </Button>
       </div>

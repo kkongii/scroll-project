@@ -1,6 +1,5 @@
 'use client';
 import { useReadContract } from 'wagmi';
-
 import WNW_ABI from '@/abi/IWNW.abi';
 import {
   Card,
@@ -12,8 +11,15 @@ import {
 } from '@/components/ui/card';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const WNW_PRECOMPILE_ADDRESS = '0x358686178A7F2A87c9CAeE638d8c3DB0e199b5Ef';
+
 export const GameDetail = () => {
   const params = useParams();
   const { id } = params as { id: string };
@@ -24,7 +30,6 @@ export const GameDetail = () => {
   });
 
   const [game, setGame] = useState<any>();
-  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (allGames) {
@@ -40,42 +45,33 @@ export const GameDetail = () => {
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>‘What we need to know’ (Announcement Info)</CardTitle>
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="text-[#292929] font-semibold"
-        >
-          {isExpanded ? 'Close -' : 'Detail +'}
-        </button>
+    <Card className="w-full bg-white text-black -mb-10 pb-2.5">
+      <CardHeader className="flex flex-row items-end">
+        <CardTitle className="text-[24px] mt-2">‘What we need to know’</CardTitle>
+        <span className="text-[20px] ml-2">(Announcement Info)</span>
       </CardHeader>
       <CardContent className="grid gap-4">
-      {isExpanded && (
-        <CardDescription>
-          This market will resolve to “Yes” if Kamala Harris wins the 2024 US
-          Presidential Election. Otherwise, this market will resolve to “No.”
-          The resolution source for this market is the Associated Press, Fox
-          News, and NBC. This market will resolve once all three sources call
-          the race for the same candidate. If all three sources haven’t called
-          the race for the same candidate by the inauguration date (January 20,
-          2025) this market will resolve based on who is inaugurated. Note: An
-          update may be made to this market to allow for early expiration if the
-          candidate is definitively no longer in contention for the presidency.
-        </CardDescription>
-      )}
-        <div className=" flex items-center space-x-4 rounded-md border p-4">
-          <div className="flex-1 space-y-1">
-            <p className="text-sm text-muted-foreground">Yes : It's </p>
-            <p className="text-sm text-muted-foreground">No : HOHOHO</p>
-          </div>
-        </div>
+        <Accordion type="multiple">
+          <AccordionItem value="item-1">
+            <AccordionTrigger className="text-black text-base text-[18px]">What is AMA(Ask Me Anything)</AccordionTrigger>
+            <AccordionContent
+              className="text-[#575757] bg-[#E5E5E5] shadow-inner p-6"
+              style={{ boxShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1)' }}
+            >
+              An AMA (Ask Me Anything) is a live Q&A session where experts or project representatives answer questions from the audience, providing transparency and engaging directly with their community, often used to share updates and build trust.
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-2">
+            <AccordionTrigger className="text-black text-base text-[18px]">How the Recent AMA Drove a Surge in BNB Price</AccordionTrigger>
+            <AccordionContent
+              className="text-[#575757] bg-[#E5E5E5] shadow-inner p-6"
+              style={{ boxShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1)' }}
+            >
+              The latest AMA with Binance’s leadership revealed key updates, including new partnerships and tech upgrades, boosting investor confidence. This transparency and strategic outlook drove a noticeable increase in BNB demand, highlighting the AMA’s significant impact on market sentiment.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </CardContent>
-      <CardFooter>
-        <CardDescription>
-          After AMA, predict changes in token price
-        </CardDescription>
-      </CardFooter>
     </Card>
   );
 };
