@@ -24,6 +24,7 @@ export const GameDetail = () => {
   });
 
   const [game, setGame] = useState<any>();
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (allGames) {
@@ -40,8 +41,17 @@ export const GameDetail = () => {
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle>BnB Price Prediction</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle>‘What we need to know’ (Announcement Info)</CardTitle>
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-[#292929] font-semibold"
+        >
+          {isExpanded ? 'Close -' : 'Detail +'}
+        </button>
+      </CardHeader>
+      <CardContent className="grid gap-4">
+      {isExpanded && (
         <CardDescription>
           This market will resolve to “Yes” if Kamala Harris wins the 2024 US
           Presidential Election. Otherwise, this market will resolve to “No.”
@@ -53,8 +63,7 @@ export const GameDetail = () => {
           update may be made to this market to allow for early expiration if the
           candidate is definitively no longer in contention for the presidency.
         </CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-4">
+      )}
         <div className=" flex items-center space-x-4 rounded-md border p-4">
           <div className="flex-1 space-y-1">
             <p className="text-sm text-muted-foreground">Yes : It's </p>

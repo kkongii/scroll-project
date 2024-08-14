@@ -21,7 +21,12 @@ export const GameDetailComment = () => {
       <div className="ml-5 mr-5 flex space-x-4">
         <div className="w-1/2 space-y-4">
           <div className="space-y-4">
-            <h4 className="text-sm font-bold text-lime-300">Up</h4>
+          <div className="flex items-center mb-2">
+              <span className="flex items-center mb-2 text-xs font-bold border border-[#00A29A] text-[#00A29A] rounded-[15px] py-1 px-3 mr-5">
+                Price Up
+              </span>
+              <span className="text-[#B6B6B6] text-[11px]">+213 Comment</span>
+            </div>
             <div className="grid gap-6">
               <div className="flex items-center justify-between space-x-4">
                 <div className="flex items-center space-x-4">
@@ -93,7 +98,12 @@ export const GameDetailComment = () => {
 
         <div className="w-1/2 space-y-4">
           <div className="space-y-4">
-            <h4 className="text-sm font-bold text-rose-600">Down</h4>
+          <div className="flex items-center mb-2">
+              <span className="flex items-center mb-2 text-xs font-bold border border-[#C73535] text-[#C73535] rounded-[15px] py-1 px-3 mr-5">
+                Price Down
+              </span>
+              <span className="text-[#B6B6B6] text-[11px]">+98 Comment</span>
+            </div>
             <div className="grid gap-6">
               <div className="flex items-center justify-between space-x-4">
                 <div className="flex items-center space-x-4">

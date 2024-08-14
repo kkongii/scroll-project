@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 
 export default function page() {
   return (
-    <div className="mt-10 space-y-6 p-4 md:p-8">
+    <div className="mt-10 space-y-6 p-4 md:p-8 h-screen overflow-y-auto">
       <h1 className="mb-5 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-3xl">
         Price prediction service from 'Wise and Weird' people.
       </h1>

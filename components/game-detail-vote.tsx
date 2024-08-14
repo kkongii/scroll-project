@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Label } from 'recharts';
 import {
   Card,
   CardContent,
@@ -11,14 +11,8 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Label, RadialBarChart, PolarRadiusAxis, RadialBar } from 'recharts';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent
-} from './ui/chart';
-import { StarIcon } from '@radix-ui/react-icons';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
+import { RadialBarChart, PolarRadiusAxis, RadialBar } from 'recharts';
 
 export function GameDetailVote() {
   const chartData = [{ up: 1260, down: 570 }];
@@ -37,23 +31,24 @@ export function GameDetailVote() {
   } satisfies ChartConfig;
 
   return (
-    <Card className="mx-auto w-full max-w-sm">
+    <Card className="mx-auto w-full max-w-sm max-h-auto bg-white text-black">
       <CardHeader>
-        <CardTitle>Wise and Weird</CardTitle>
+        <CardTitle>Current Info</CardTitle>
         <CardDescription>
           Can you predict the outcome of the next Wise and Weird event?
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <div className="flex items-center">Total $50k</div>
-        <div className="flex items-center">Current Price $50</div>
+        {/* <div className="flex items-center">Total $50k</div>
+        <div className="flex items-center">Current Price $50</div> */}
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[250px]"
+          className="mx-auto aspect-square w-full max-w-[250px] mb-[-100px] mt-[-20px]"
         >
           <RadialBarChart
             data={chartData}
-            endAngle={180}
+            startAngle={180} 
+            endAngle={0}      
             innerRadius={80}
             outerRadius={130}
           >
@@ -70,14 +65,14 @@ export function GameDetailVote() {
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) - 16}
-                          className="fill-foreground text-2xl font-bold"
+                          className="fill-black text-2xl font-bold"
                         >
                           {totalVisitors.toLocaleString()}
                         </tspan>
                         <tspan
-                          x={viewBox.cx}
+                          x={viewBox.cx} 
                           y={(viewBox.cy || 0) + 4}
-                          className="fill-muted-foreground"
+                          className="fill-black"
                         >
                           Total
                         </tspan>
@@ -91,35 +86,49 @@ export function GameDetailVote() {
               dataKey="up"
               stackId="a"
               cornerRadius={5}
-              fill="var(--color-up)"
+              fill="#00A29A" 
               className="stroke-transparent stroke-2"
             />
             <RadialBar
               dataKey="down"
-              fill="var(--color-down)"
+              fill="#C73535" 
               stackId="a"
               cornerRadius={5}
               className="stroke-transparent stroke-2"
             />
           </RadialBarChart>
         </ChartContainer>
-        <div className="grid gap-2">
-          <Input id="amount" placeholder="Betting amount    " />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="grid gap-2">
+        <div className="flex items-center font-bold">My Prediction</div>
+        <div className="grid grid-cols-2">
+          <div className="grid gap-2 items-center justify-center text-center">
             <Label>Up</Label>
-            <Button variant="outline" className="bg-lime-700">
-              Vote Up
-            </Button>
+              <img
+                src="/ButtonUp.png"
+                alt="Vote Up"
+                className="w-200 h-110 object-contain cursor-pointer active:scale-95 active:opacity-75 transition-transform duration-75"
+              />
           </div>
-          <div className="grid gap-2">
+          <div className="grid gap-2 items-center justify-center text-center">
             <Label>Down</Label>
-            <Button variant="outline" className="bg-rose-700">
-              Vote Down
-            </Button>
+            <img
+              src="/ButtonDown.png"
+              alt="Vote Down"
+                className="w-200 h-100 object-contain cursor-pointer active:scale-95 active:opacity-75 transition-transform duration-75"
+              />
           </div>
         </div>
+        <div className="flex items-center font-bold">Betting Price</div>
+        <div className="flex items-center gap-2">
+          <input
+            id="amount"
+            placeholder="0"
+            className="border-b border-[#B6B6B6] px-2 focus:outline-none w-full bg-white text-right text-lg text-gray-500"
+          />
+          <span className="text-black font-semibold mt-[5px] text-lg">BnB</span>
+        </div>
+        <button className="w-[335px] h-[55px] rounded-lg bg-white text-black font-semibold shadow-md hover:shadow-lg focus:outline-none border border-[#B6B6B6] active:bg-gray-200 active:scale-95 transition-transform duration-75">
+          Confirm
+        </button>
       </CardContent>
     </Card>
   );
