@@ -23,13 +23,14 @@ export const GameList = () => {
   if (!allGames) {
     return <></>;
   }
+  
 
   return (
     <div className="flex space-x-6">
       {allGames &&
         allGames.map((game: any) => {
           return (
-            <Link href={`/games/${game.gameId}`} key={game.gameId}>
+            <Link href={`/games/${game.gameId}?key=${game.gameId}`} key={game.gameId}>
               <Card className="mx-auto w-full max-w-sm cursor-pointer hover:shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex">
@@ -52,11 +53,11 @@ export const GameList = () => {
                     <div className="flex-1 space-y-2">
                       <div className="flex justify-between">
                         <p className="text-sm text-green-700">UP</p>
-                        <p className="text-sm text-green-700">60%</p>
+                        <p className="text-sm text-green-700">{((Number(game.upAmount) / Number(game.prizeAmount)) * 100).toFixed(0)}%</p>
                       </div>
                       <div className="flex justify-between">
                         <p className="text-sm text-rose-700">DOWN</p>
-                        <p className="text-sm text-rose-700">40%</p>
+                        <p className="text-sm text-rose-700">{((Number(game.downAmount) / Number(game.prizeAmount)) * 100).toFixed(0)}%</p>
                       </div>
                     </div>
                   </div>
@@ -64,7 +65,7 @@ export const GameList = () => {
                 <CardFooter>
                   <CardDescription>
                     <div className="flex space-x-5 text-sm text-muted-foreground">
-                      <div className="flex items-center">$50.4k Bets</div>
+                      <div className="flex items-center">${(Number(game.prizeAmount) / 10**18).toFixed(2)} </div>
                       <div className="flex items-center">20 Comments</div>
                     </div>
                   </CardDescription>

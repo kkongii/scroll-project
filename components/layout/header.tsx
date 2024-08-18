@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Account } from '../account';
+import { Button } from '../ui/button';
 
 export default function Header() {
   return (
@@ -9,6 +10,9 @@ export default function Header() {
         <div className="flex items-center space-x-3">
           <Link href={'/'}>
             <Image src="/logo.png" alt="Logo" width={90} height={38} />
+          </Link>
+          <Link href={'/create-bet'}>
+            <Button className=" bg-amber-400 w-30 ml-7 h-8 font-semibold">Create Issue</Button>
           </Link>
         </div>
         <div className="flex items-center gap-2">

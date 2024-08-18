@@ -55,7 +55,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const WNW_PRECOMPILE_ADDRESS = '0x358686178A7F2A87c9CAeE638d8c3DB0e199b5Ef';
+const WNW_PRECOMPILE_ADDRESS = '0x877C3Ea09c657C010e836a6AF35BA0a315Dc785F';
 export const CreateForm: React.FC = () => {
   const { writeContract } = useWriteContract();
   const params = useParams();
@@ -94,7 +94,7 @@ export const CreateForm: React.FC = () => {
         abi: WNW_ABI,
         address: WNW_PRECOMPILE_ADDRESS,
         functionName: 'createGame',
-        args: [3600, 10, '0x36e23acaa237fdd90180fe6b7d2630e53db61924']
+        args: [3600, 10, '0x54E8d3c6Bfa55F809d5687AAB4d1Eb00f13394B4']
       });
       // router.refresh();
       // toast({
@@ -168,53 +168,61 @@ export const CreateForm: React.FC = () => {
           className="w-full space-y-8"
         >
           <div className="space-y-3">
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>캠페인 종류</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="캠페인 타입을 선택해주세요."
+          <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Issue Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={loading}
+                          placeholder="Please put title of issue."
+                          {...field}
                         />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem key="SEARCH" value="SEARCH">
-                        검색
-                      </SelectItem>
-                      <SelectItem key="FAVORITE" value="FAVORITE">
-                        저장하기
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="keyword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Project Token Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={loading}
+                          placeholder="Please put your token contract address (BEP-20)"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="mid"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={loading}
+                          placeholder="Please choose category."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />{' '}
             <FormItem>
-              <FormLabel>시작일</FormLabel>
               <FormControl>
                 <div style={{ position: 'relative', zIndex: 1 }}>
                   <Popover>
-                    <PopoverTrigger asChild>
-                      <Button id="startDate" variant={'outline'}>
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {startDate ? (
-                          formatDate(startDate)
-                        ) : (
-                          <span>시작일을 선택해주세요.</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
                     <PopoverContent
                       className="w-auto bg-background p-0"
                       align="end"
@@ -233,7 +241,7 @@ export const CreateForm: React.FC = () => {
               </FormControl>
             </FormItem>
             <FormItem>
-              <FormLabel>종료일</FormLabel>
+              <FormLabel>Due Date</FormLabel>
               <FormControl>
                 <div style={{ position: 'relative', zIndex: 1 }}>
                   <Popover>
@@ -266,33 +274,17 @@ export const CreateForm: React.FC = () => {
             </FormItem>
             {type !== 'slot' && (
               <>
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>플레이스명</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder="플레이스명을 입력해주세요."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                
                 <FormField
                   control={form.control}
                   name="keyword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>키워드</FormLabel>
+                      <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Input
                           disabled={loading}
-                          placeholder="키워드를 입력해주세요."
+                          placeholder="Please put description about issues"
                           {...field}
                         />
                       </FormControl>
@@ -300,65 +292,8 @@ export const CreateForm: React.FC = () => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="mid"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>플레이스 ID</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder="플레이스 ID를 입력해주세요."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />{' '}
-                <FormField
-                  control={form.control}
-                  name="question"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        질문(검색하기 캠페인에만 등록해주세요.)
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="질문을 선택해주세요." />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent></SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="sight"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        정답(검색하기 캠페인에만 등록해주세요.)
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder="명소를 입력해주세요."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                
+                
               </>
             )}
             <FormField
@@ -366,10 +301,10 @@ export const CreateForm: React.FC = () => {
               name="count"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>1일 유입량</FormLabel>
+                  <FormLabel>Contacts</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="1일 유입량을 입력해주세요."
+                      placeholder="Please put your contacts. ex) Twitter, Telegram, Discord etc."
                       {...field}
                     />
                   </FormControl>
@@ -377,7 +312,7 @@ export const CreateForm: React.FC = () => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
@@ -408,7 +343,7 @@ export const CreateForm: React.FC = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

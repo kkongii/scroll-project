@@ -25,7 +25,7 @@ export default function page() {
             value="hardfork"
             className="px-4 py-2 text-center text-lg font-extrabold aria-selected:text-black"
           >
-            HARD FORK
+            Lisiting
           </TabsTrigger>
           <TabsTrigger
             value="rebranding"

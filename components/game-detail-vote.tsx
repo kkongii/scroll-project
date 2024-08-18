@@ -13,12 +13,37 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 import { RadialBarChart, PolarRadiusAxis, RadialBar } from 'recharts';
+import { useReadContract } from 'wagmi';
+import WNW_ABI from '@/abi/IWNW.abi';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+
 
 export function GameDetailVote() {
-  const chartData = [{ up: 1260, down: 570 }];
+  const WNW_PRECOMPILE_ADDRESS = '0x358686178A7F2A87c9CAeE638d8c3DB0e199b5Ef';
+  const searchParams = useSearchParams();
+  const key = searchParams.get('key');
+  console.log(key)
+    const { data: game }: any = useReadContract({
+      address: WNW_PRECOMPILE_ADDRESS,
+      abi: WNW_ABI,
+      functionName: 'getGame',
+      args: [key]
+    });
+
+
+  
+  if (!game) {
+    console.log("undefined")
+    return <></>;
+  }
+  
+  
+  const upAmount = game.upAmount ? BigInt(game.upAmount) : 0n;
+  const downAmount = game.downAmount ? BigInt(game.downAmount) : 0n;
+  const chartData = [{ up:  Number(upAmount) / 10 ** 18, down:  Number(downAmount) / 10 ** 18 }];
 
   const totalVisitors = chartData[0].up + chartData[0].down;
-
   const chartConfig = {
     up: {
       label: 'Up',
