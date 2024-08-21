@@ -5,7 +5,25 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 
+// 랜덤 지갑 주소를 생성하는 함수
+const generateRandomWalletAddress = () => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let address = '0x';
+  for (let i = 0; i < 40; i++) {
+    address += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return address;
+};
+
+// 지갑 주소를 축약하는 함수
+const shortenAddress = (address) => {
+  return `${address.slice(0, 6)}...${address.slice(-6)}`;
+};
+
 export const GameDetailComment = () => {
+  // 서로 다른 지갑 주소 생성
+  const walletAddresses = Array.from({ length: 8 }, generateRandomWalletAddress);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">
@@ -32,70 +50,24 @@ export const GameDetailComment = () => {
               <span className="text-[#B6B6B6] text-[11px]">+213 Comment</span>
             </div>
             <div className="grid gap-6">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="/avatars/03.png" alt="Image" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm font-medium leading-none">
-                      Hey it's real
-                    </p>
+              {walletAddresses.slice(0, 4).map((address, index) => (
+                <div key={index} className="flex items-center justify-between space-x-4">
+                  <div className="flex items-center space-x-4">
+                    <Avatar>
+                      <AvatarImage src="/avatars/03.png" alt="Image" />
+                      <AvatarFallback>OM</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        {shortenAddress(address)}
+                      </p>
+                      <p className="text-sm font-medium leading-none">
+                        Hey it's real
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="/avatars/03.png" alt="Image" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm font-medium leading-none">
-                      Hey it's real
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="/avatars/03.png" alt="Image" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm font-medium leading-none">
-                      Hey it's real
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="/avatars/03.png" alt="Image" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm font-medium leading-none">
-                      Hey it's real
-                    </p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -109,70 +81,24 @@ export const GameDetailComment = () => {
               <span className="text-[#B6B6B6] text-[11px]">+98 Comment</span>
             </div>
             <div className="grid gap-6">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="/avatars/03.png" alt="Image" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm font-medium leading-none">
-                      Hey it's real
-                    </p>
+              {walletAddresses.slice(4, 8).map((address, index) => (
+                <div key={index} className="flex items-center justify-between space-x-4">
+                  <div className="flex items-center space-x-4">
+                    <Avatar>
+                      <AvatarImage src="/avatars/03.png" alt="Image" />
+                      <AvatarFallback>OM</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        {shortenAddress(address)}
+                      </p>
+                      <p className="text-sm font-medium leading-none">
+                        Hey it's real
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="/avatars/03.png" alt="Image" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm font-medium leading-none">
-                      Hey it's real
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="/avatars/03.png" alt="Image" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm font-medium leading-none">
-                      Hey it's real
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-4">
-                  <Avatar>
-                    <AvatarImage src="/avatars/03.png" alt="Image" />
-                    <AvatarFallback>OM</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      Olivia Martin
-                    </p>
-                    <p className="text-sm font-medium leading-none">
-                      Hey it's real
-                    </p>
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

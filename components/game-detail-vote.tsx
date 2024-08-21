@@ -13,35 +13,96 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 import { RadialBarChart, PolarRadiusAxis, RadialBar } from 'recharts';
-import { useReadContract } from 'wagmi';
+import { useReadContract, useWriteContract } from 'wagmi';
 import WNW_ABI from '@/abi/IWNW.abi';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
+const fetchTokenPrice = async (tokenAddress: string): Promise<number | null> => {
+  try {
+    const response = await fetch(
+      `https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${tokenAddress}&vs_currencies=usd`
+    );
+    if (!response.ok) {
+      throw new Error('Failed to fetch token price');
+    }
 
+    const data = await response.json();
+    console.log('API Response:', data);
+
+    const priceInUsd = data[tokenAddress.toLowerCase()]?.usd;
+
+    if (!priceInUsd) {
+      throw new Error('Price not found for the given token');
+    }
+
+    return priceInUsd;
+  } catch (error) {
+    console.error('Error fetching token price:', error);
+    return null;
+  }
+};
 
 export function GameDetailVote() {
   const WNW_PRECOMPILE_ADDRESS = '0x358686178A7F2A87c9CAeE638d8c3DB0e199b5Ef';
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
-  console.log(key)
-    const { data: game }: any = useReadContract({
+  const [startPrice, setStartPrice] = useState<number | null>(null);
+  const [currentPrice, setCurrentPrice] = useState<number | null>(null);
+  const [betUp, setBetUp] = useState<boolean | null>(null); // Up/Down 선택 상태
+  const [amount, setAmount] = useState(''); // Input 필드에 입력된 숫자
+
+  const { data: game }: any = useReadContract({
+    address: WNW_PRECOMPILE_ADDRESS,
+    abi: WNW_ABI,
+    functionName: 'getGame',
+    args: [key]
+  });
+
+  const betAmount = BigInt(Math.floor(Number(amount) * 10 ** 18));
+
+  useEffect(() => {
+    if (game) {
+      console.log('Game data:', game);
+      const fetchPrices = async () => {
+        const startPrice = await fetchTokenPrice('0x55d398326f99059ff775485246999027b3197955');
+        const currentPrice = await fetchTokenPrice('0x55d398326f99059ff775485246999027b3197955');
+
+        setStartPrice(startPrice);
+        setCurrentPrice(currentPrice);
+      };
+
+      fetchPrices();
+    }
+  }, [game]);
+
+  const { writeContract } = useWriteContract()
+
+  const handleBet = async () => {
+    console.log('gameId : ', game.gameId);
+    console.log('betUp : ', betUp);
+    console.log('betAmount : ', betAmount);
+
+    writeContract({
+      WNW_ABI,
       address: WNW_PRECOMPILE_ADDRESS,
-      abi: WNW_ABI,
-      functionName: 'getGame',
-      args: [key]
-    });
+      functionName: 'bet',
+      args: [
+        game.gameId, betUp, betAmount
+      ],
+   })
+  };
 
-
-  
   if (!game) {
-    console.log("undefined")
+    console.log("undefined");
     return <></>;
   }
-  
-  
-  const upAmount = game.upAmount ? BigInt(game.upAmount) : 0n;
-  const downAmount = game.downAmount ? BigInt(game.downAmount) : 0n;
-  const chartData = [{ up:  Number(upAmount) / 10 ** 18, down:  Number(downAmount) / 10 ** 18 }];
+
+  const upAmount = game.upAmount ? BigInt(game.upAmount) : BigInt(0);
+  const downAmount = game.downAmount ? BigInt(game.downAmount) : BigInt(0);
+  const totalPoolAmount = upAmount + downAmount;
+
+  const chartData = [{ up: Number(upAmount) / 10 ** 18, down: Number(downAmount) / 10 ** 18 }];
 
   const totalVisitors = chartData[0].up + chartData[0].down;
   const chartConfig = {
@@ -53,24 +114,22 @@ export function GameDetailVote() {
       label: 'Down',
       color: 'hsl(var(--chart-2))'
     }
-  } satisfies ChartConfig;
+  };
 
   return (
     <Card className="mx-auto w-full max-w-sm max-h-auto bg-white text-black">
       <CardHeader>
-        <CardTitle className="text-lg">Current Info</CardTitle>
+        <CardTitle className="text-lg">Pool status</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-4">
-        {/* <div className="flex items-center">Total $50k</div>
-        <div className="flex items-center">Current Price $50</div> */}
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square w-full max-w-[250px] mb-[-100px] mt-[-20px]"
         >
           <RadialBarChart
             data={chartData}
-            startAngle={180} 
-            endAngle={0}      
+            startAngle={180}
+            endAngle={0}
             innerRadius={80}
             outerRadius={130}
           >
@@ -92,7 +151,7 @@ export function GameDetailVote() {
                           {totalVisitors.toLocaleString()}
                         </tspan>
                         <tspan
-                          x={viewBox.cx} 
+                          x={viewBox.cx}
                           y={(viewBox.cy || 0) + 4}
                           className="fill-black"
                         >
@@ -108,47 +167,59 @@ export function GameDetailVote() {
               dataKey="up"
               stackId="a"
               cornerRadius={5}
-              fill="#00A29A" 
-              className="stroke-transparent stroke-2"
+              fill={betUp === true ? '#00A29A' : '#B0E0E6'}
+              className="stroke-transparent stroke-2 cursor-pointer"
+              onClick={() => setBetUp(true)}
             />
             <RadialBar
               dataKey="down"
-              fill="#C73535" 
+              fill={betUp === false ? '#C73535' : '#FA8072'}
               stackId="a"
               cornerRadius={5}
-              className="stroke-transparent stroke-2"
+              className="stroke-transparent stroke-2 cursor-pointer"
+              onClick={() => setBetUp(false)}
             />
           </RadialBarChart>
         </ChartContainer>
+        <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BnB</div>
+        <div>Current Price: {currentPrice ? `${currentPrice} USD` : 'Loading...'}</div>
+        <div>Started Price: {startPrice ? `${startPrice} USD` : 'Loading...'}</div>
         <div className="flex items-center font-bold">My Prediction</div>
         <div className="grid grid-cols-2">
           <div className="grid gap-2 items-center justify-center text-center">
             <Label>Up</Label>
-              <img
-                src="/ButtonUp.png"
-                alt="Vote Up"
-                className="w-200 h-110 object-contain cursor-pointer active:scale-95 active:opacity-75 transition-transform duration-75"
-              />
+            <img
+              src="/ButtonUp.png"
+              alt="Vote Up"
+              className={`w-200 h-110 object-contain cursor-pointer active:scale-95 active:opacity-75 transition-transform duration-75 ${betUp === true ? 'opacity-100' : 'opacity-50'}`}
+              onClick={() => setBetUp(true)}
+            />
           </div>
           <div className="grid gap-2 items-center justify-center text-center">
             <Label>Down</Label>
             <img
               src="/ButtonDown.png"
               alt="Vote Down"
-                className="w-200 h-100 object-contain cursor-pointer active:scale-95 active:opacity-75 transition-transform duration-75"
-              />
+              className={`w-200 h-100 object-contain cursor-pointer active:scale-95 active:opacity-75 transition-transform duration-75 ${betUp === false ? 'opacity-100' : 'opacity-50'}`}
+              onClick={() => setBetUp(false)}
+            />
           </div>
         </div>
         <div className="flex items-center font-bold">Betting Price</div>
         <div className="flex items-center gap-2">
           <input
             id="amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
             placeholder="0"
             className="border-b border-[#B6B6B6] px-2 focus:outline-none w-full bg-white text-right text-lg text-gray-500"
           />
           <span className="text-black font-semibold mt-[5px] text-lg">BnB</span>
         </div>
-        <button className="w-[335px] h-[55px] rounded-lg bg-white text-black font-semibold shadow-md hover:shadow-lg focus:outline-none border border-[#B6B6B6] active:bg-gray-200 active:scale-95 transition-transform duration-75">
+        <button
+          className="w-[335px] h-[55px] rounded-lg bg-white text-black font-semibold shadow-md hover:shadow-lg focus:outline-none border border-[#B6B6B6] active:bg-gray-200 active:scale-95 transition-transform duration-75"
+          onClick={handleBet}
+        >
           Confirm
         </button>
       </CardContent>
