@@ -12,7 +12,7 @@ export default function Header() {
             <Image src="/logo.png" alt="Logo" width={90} height={38} />
           </Link>
           <Link href={'/create-bet'}>
-            <Button className=" bg-amber-400 w-30 ml-7 h-8 font-semibold">Create Issue</Button>
+            <Button className=" bg-amber-400 w-30 ml-7 h-8 font-semibold">Create Event</Button>
           </Link>
         </div>
         <div className="flex items-center gap-2">

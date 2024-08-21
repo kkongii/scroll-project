@@ -19,10 +19,11 @@ export const GameList = () => {
     abi: WNW_ABI,
     functionName: 'getGameList'
   });
-
+  console.log(allGames)
   if (!allGames) {
     return <></>;
   }
+
   
 
   return (

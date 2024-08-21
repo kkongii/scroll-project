@@ -68,7 +68,7 @@ export const CreateForm: React.FC = () => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const title = 'Create Bet';
+  const title = 'Create Event';
   const toastMessage = 'Successfully created bet';
   const action = 'Create';
 
@@ -173,11 +173,28 @@ export const CreateForm: React.FC = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Issue Title</FormLabel>
+                      <FormLabel>Event Title</FormLabel>
                       <FormControl>
                         <Input
                           disabled={loading}
                           placeholder="Please put title of issue."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Project Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={loading}
+                          placeholder="Please put name of project."
                           {...field}
                         />
                       </FormControl>
