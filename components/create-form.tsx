@@ -42,6 +42,11 @@ import { Calendar } from './ui/calendar';
 import dayjs from 'dayjs';
 import { useWriteContract } from 'wagmi';
 import { formatDate } from '@/utils/string-functions';
+import {DateRangePicker} from "@nextui-org/react";
+import {parseDateTime} from "@internationalized/date";
+import { DateRange } from 'react-day-picker';
+
+
 const formSchema = z.object({
   name: z.string().default('').optional(),
   count: z.coerce.number().optional(),
@@ -258,10 +263,18 @@ export const CreateForm: React.FC = () => {
               </FormControl>
             </FormItem>
             <FormItem>
-              <FormLabel>Due Date</FormLabel>
+              <FormLabel>Due Date</FormLabel> 
               <FormControl>
-                <div style={{ position: 'relative', zIndex: 1 }}>
-                  <Popover>
+              <div className="w-full max-w-xl flex flex-col items-start gap-4">
+                <DateRangePicker
+        defaultValue={{
+          start: parseDateTime("2024-08-20T07:45"),
+          end: parseDateTime("2024-08-30T19:15"),
+        }}
+        labelPlacement="outside"
+        className="flex items-center space-x-17"
+      />
+                  {/* <Popover>
                     <PopoverTrigger asChild>
                       <Button id="endDate" variant={'outline'}>
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -285,7 +298,7 @@ export const CreateForm: React.FC = () => {
                         numberOfMonths={1}
                       />
                     </PopoverContent>
-                  </Popover>
+                  </Popover> */}
                 </div>
               </FormControl>
             </FormItem>

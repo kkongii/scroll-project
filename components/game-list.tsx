@@ -11,6 +11,7 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import Link from 'next/link';
+import { Button } from './ui/button';
 
 const WNW_PRECOMPILE_ADDRESS = '0x358686178A7F2A87c9CAeE638d8c3DB0e199b5Ef';
 export const GameList = () => {
@@ -27,12 +28,12 @@ export const GameList = () => {
   
 
   return (
-    <div className="flex space-x-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 w-full">
       {allGames &&
         allGames.map((game: any) => {
           return (
-            <Link href={`/games/${game.gameId}?key=${game.gameId}`} key={game.gameId}>
-              <Card className="mx-auto w-full max-w-sm cursor-pointer hover:shadow-lg">
+            <div key={game.gameId}>
+              <Card className="my-4 w-96 max-w-sm cursor-pointer hover:shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex">
                     <Image
@@ -52,6 +53,7 @@ export const GameList = () => {
                   </h1>
                   <div className=" flex items-center space-x-4 rounded-md border p-4">
                     <div className="flex-1 space-y-2">
+                      <div className="flex items-center justify-end text-xs text-zinc-400">total amount : {(Number(game.prizeAmount) / 10**18).toFixed(2)} BNB </div>
                       <div className="flex justify-between">
                         <p className="text-sm text-green-700">UP</p>
                         <p className="text-sm text-green-700">{((Number(game.upAmount) / Number(game.prizeAmount)) * 100).toFixed(0)}%</p>
@@ -65,14 +67,19 @@ export const GameList = () => {
                 </CardContent>
                 <CardFooter>
                   <CardDescription>
-                    <div className="flex space-x-5 text-sm text-muted-foreground">
-                      <div className="flex items-center">${(Number(game.prizeAmount) / 10**18).toFixed(2)} </div>
+                    <div className="flex w-full text-sm text-muted-foreground">
                       <div className="flex items-center">20 Comments</div>
-                    </div>
+                      <Link href={`/games/${game.gameId}?key=${game.gameId}`} key={game.gameId}>
+                      <Button className="bg-amber-400 w-26 h-7 font-semibold text-white">Enter game
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5" style={{ transform: 'scaleX(-1)' }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                        </svg></Button>
+                      </Link>
+                      </div>
                   </CardDescription>
                 </CardFooter>
               </Card>
-            </Link>
+            </div>
           );
         })}
     </div>
