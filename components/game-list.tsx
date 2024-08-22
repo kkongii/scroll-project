@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 
-const WNW_PRECOMPILE_ADDRESS = '0x358686178A7F2A87c9CAeE638d8c3DB0e199b5Ef';
+const WNW_PRECOMPILE_ADDRESS = '0xe31bA092390628Aaf5faFda2F50bFD7d51C9e657';
 export const GameList = () => {
   const { data: allGames }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,
@@ -24,6 +24,7 @@ export const GameList = () => {
     return <></>;
   }
   
+  console.log(allGames);
 
   return (
     <div className="flex space-x-6">
@@ -41,7 +42,7 @@ export const GameList = () => {
                       height={30}
                       className="mb-4 mr-2"
                     />
-                    BnB Price Prediction
+                    {game.gameTitle}
                   </CardTitle>
                   <hr className="border-t" />
                 </CardHeader>

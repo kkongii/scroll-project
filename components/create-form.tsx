@@ -55,7 +55,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const WNW_PRECOMPILE_ADDRESS = '0x877C3Ea09c657C010e836a6AF35BA0a315Dc785F';
+const WNW_PRECOMPILE_ADDRESS = '0xe31bA092390628Aaf5faFda2F50bFD7d51C9e657';
 export const CreateForm: React.FC = () => {
   const { writeContract } = useWriteContract();
   const params = useParams();
@@ -94,7 +94,7 @@ export const CreateForm: React.FC = () => {
         abi: WNW_ABI,
         address: WNW_PRECOMPILE_ADDRESS,
         functionName: 'createGame',
-        args: [3600, 10, '0x54E8d3c6Bfa55F809d5687AAB4d1Eb00f13394B4']
+        args: [3600, 10, '0x54E8d3c6Bfa55F809d5687AAB4d1Eb00f13394B4', 'yong' ]
       });
       // router.refresh();
       // toast({
