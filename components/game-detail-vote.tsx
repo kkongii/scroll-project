@@ -44,7 +44,7 @@ const fetchTokenPrice = async (tokenAddress: string): Promise<number | null> => 
 };
 
 export function GameDetailVote() {
-  const WNW_PRECOMPILE_ADDRESS = '0x358686178A7F2A87c9CAeE638d8c3DB0e199b5Ef';
+  const WNW_PRECOMPILE_ADDRESS = '0xe31bA092390628Aaf5faFda2F50bFD7d51C9e657';
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
   const [startPrice, setStartPrice] = useState<number | null>(null);
@@ -181,7 +181,7 @@ export function GameDetailVote() {
             />
           </RadialBarChart>
         </ChartContainer>
-        <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BnB</div>
+        <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BNB</div>
         <div>Current Price: {currentPrice ? `${currentPrice} USD` : 'Loading...'}</div>
         <div>Started Price: {startPrice ? `${startPrice} USD` : 'Loading...'}</div>
         <div className="flex items-center font-bold">My Prediction</div>

@@ -161,6 +161,7 @@ export const CreateForm: React.FC = () => {
       }
     }
   };
+  console.log(startDate);
   return (
     <>
       <div className="flex items-center justify-between">
