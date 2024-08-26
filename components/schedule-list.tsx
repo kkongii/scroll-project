@@ -120,10 +120,10 @@ export const ScheduleList = () => {
               <CardTitle>News & Predict</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
-              <Tabs defaultValue="tbc" className="space-y-4">
+              <Tabs defaultValue="ongoing" className="space-y-4">
                 <TabsList>
-                  <TabsTrigger value="tbc">TBC</TabsTrigger>
                   <TabsTrigger value="ongoing">Ongoing</TabsTrigger>
+                  <TabsTrigger value="tbc">TBC</TabsTrigger>
                   <TabsTrigger value="closed">Closed</TabsTrigger>
                 </TabsList>
                 <TabsContent value="tbc" className="space-y-4">

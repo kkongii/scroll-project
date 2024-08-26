@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from './ui/button';
-export const ScheduleItem = (game: any) => {
+export const ScheduleItem = ({ game }: any) => {
   return (
     <div key={game.gameId}>
       <Card className="my-4 w-96 w-full cursor-pointer hover:shadow-lg">
