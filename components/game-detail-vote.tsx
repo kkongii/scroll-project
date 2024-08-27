@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
-import { RadialBarChart, PolarRadiusAxis, RadialBar } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer  } from 'recharts';
+import { ChartContainer,ChartConfig  } from '@/components/ui/chart';
 import { useReadContract, useWriteContract } from 'wagmi';
 import WNW_ABI from '@/abi/IWNW.abi';
 import { useSearchParams } from 'next/navigation';
@@ -39,13 +39,38 @@ const fetchTokenPrice = async (tokenAddress: string): Promise<number | null> => 
   }
 };
 
+const fetchTokenInfo = async (tokenAddress: string) => {
+  try {
+    const response = await fetch(
+      `https://api.coingecko.com/api/v3/coins/binance-smart-chain/contract/${tokenAddress}`
+    );
+    if (!response.ok) {
+      throw new Error('Failed to fetch token info');
+    }
+
+    const data = await response.json();
+    console.log('Token Info:', data);
+
+    const tokenInfo = {
+      name: data.name,
+      image: data.image.thumb,
+    };
+
+    return tokenInfo;
+  } catch (error) {
+    console.error('Error fetching token info:', error);
+    return null;
+  }
+};
+
 export function GameDetailVote() {
-  const WNW_PRECOMPILE_ADDRESS = '0xe4f6f354a5e3c6bb3c3d8bdcad01e40724fa1ce7';
+  const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
   const [currentPrice, setCurrentPrice] = useState<number | null>(null);
   const [betUp, setBetUp] = useState<boolean | null>(null); // Up/Down 선택 상태
   const [amount, setAmount] = useState(''); // Input 필드에 입력된 숫자
+  const [tokenInfo, setTokenInfo] = useState<{name: string, image: string} | null>(null);
 
   const { data: game }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,
@@ -67,6 +92,15 @@ export function GameDetailVote() {
       fetchPrices();
     }
   }, [game]);
+
+  useEffect(() => {
+    const getTokenInfo = async () => {
+      const tokenInfo = await fetchTokenInfo('0x55d398326f99059ff775485246999027b3197955');
+      setTokenInfo(tokenInfo);
+    };
+  
+    getTokenInfo();
+  }, []);
 
   const { writeContract } = useWriteContract();
 
@@ -95,107 +129,134 @@ export function GameDetailVote() {
   const downAmount = game.downAmount ? BigInt(game.downAmount) : BigInt(0);
   const totalPoolAmount = upAmount + downAmount;
 
-  const chartData = [{ up: Number(upAmount) / 10 ** 18, down: Number(downAmount) / 10 ** 18 }];
-
-  const totalVisitors = chartData[0].up + chartData[0].down;
-  const chartConfig = {
+  const chartConfig: ChartConfig = {
     up: {
       label: 'Up',
-      color: 'hsl(var(--chart-5))'
+      color: '#00A29A',
     },
     down: {
       label: 'Down',
-      color: 'hsl(var(--chart-2))'
-    }
+      color: '#C73535', 
+    },
   };
+  
+
+  const chartData = [
+    { name: 'Votes', up: Number(upAmount) / 10 ** 18, down: Number(downAmount) / 10 ** 18 }
+  ];
+  
+
+  const endDate = Number(game.endDate) * 1000;
+  const timeRemaining = endDate - Date.now();
+  const oneDayInMs = 24 * 60 * 60 * 1000;
+
+  const renderStatusButtons = () => {
+    const buttons = [];
+
+    if (game.isEnded) {
+      buttons.push(
+        <div
+          key="end"
+          className="bg-[#575757] text-white text-[10px] h-[22px] px-4 rounded-full flex justify-center items-center font-normal"
+        >
+          End
+        </div>
+      );
+    } else {
+      buttons.push(
+        <div
+          key="live"
+          className="bg-[#00A29A] text-white text-[10px] h-[22px] px-4 rounded-full flex justify-center items-center font-normal"
+        >
+          Live
+        </div>
+      );
+    
+      if (timeRemaining < oneDayInMs) {
+        buttons.push(
+          <div
+            key="end-soon"
+            className="bg-[#C73535] text-white text-[10px] h-[22px] px-4 rounded-full flex justify-center items-center font-normal"
+          >
+            End Soon
+          </div>
+        );
+      }
+    }
+    
+
+    return buttons;
+  };
+
+
 
   return (
     <Card className="grid gap-8 border-none mx-auto w-full max-w-sm text-black">
-       {/* <button className='text-white'
-          onClick={() => {
-            if (currentPrice !== null) {
-              writeContract({
-                abi: WNW_ABI,
-                address: WNW_PRECOMPILE_ADDRESS,
-                functionName: 'endGame',
-                args: [
-                  game.gameId,
-                  Math.floor(currentPrice * 10 ** 18)
-                ]
-              });
-            } else {
-              console.log("Current price is not available yet");
-            }
-          }}
-        >
-          End
-      </button> */}
-      <CardHeader className="mx-auto w-full max-w-sm max-h-auto bg-white text-black rounded-xl">
-        <CardTitle className="text-lg">Pool status</CardTitle>
-        <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BnB</div>
-        <div>Current Price: {currentPrice ? `${currentPrice} USD` : 'Loading...'}</div>
-        <div>Started Price: {game.markedPrice ? `${Number(game.markedPrice) / 10 ** 18} USD` : 'Loading...'}</div> {/* markedPrice 사용 */}
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[250px] mb-[-100px] mt-[-20px]"
-        >
-          <RadialBarChart
-            data={chartData}
-            startAngle={180}
-            endAngle={0}
-            innerRadius={80}
-            outerRadius={130}
-          >
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                    return (
-                      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) - 16}
-                          className="fill-black text-2xl font-bold"
-                        >
-                          {totalVisitors.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 4}
-                          className="fill-black"
-                        >
-                          Total
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </PolarRadiusAxis>
-            <RadialBar
-              dataKey="up"
-              stackId="a"
-              cornerRadius={5}
-              fill={betUp === true ? '#00A29A' : '#B0E0E6'}
-              className="stroke-transparent stroke-2 cursor-pointer"
-              onClick={() => setBetUp(true)}
-            />
-            <RadialBar
-              dataKey="down"
-              fill={betUp === false ? '#C73535' : '#FA8072'}
-              stackId="a"
-              cornerRadius={5}
-              className="stroke-transparent stroke-2 cursor-pointer"
-              onClick={() => setBetUp(false)}
-            />
-          </RadialBarChart>
-        </ChartContainer>
-      </CardHeader>
-      <CardContent className="mx-auto w-full max-w-sm max-h-auto bg-white text-black rounded-xl">
+      <CardHeader className="mx-auto w-full max-w-sm max-h-auto bg-white text-black rounded-xl p-6">
+          <CardTitle className="flex gap-2">
+            <div className='text-lg'>Pool status</div>
+            <div className="flex space-x-2 items-center">
+              {renderStatusButtons()}
+            </div>
+          </CardTitle>
+          <div className='flex space-between'>
+            <div className='flex flex-col gap-2 mb-2'>
+              <div>token Info</div>
+              <div className='text-3xl font-bold'>$ {currentPrice ? `${currentPrice.toFixed(2)}` : 'Loading...'}</div>
+            </div>
+            <div className='flex flex-col'>
+              <div className='font-bold'>Started: $ {game.startPrice ? `${Number(game.startPrice).toFixed(2)}` : 'Loading...'}</div>
+            </div>
+          </div>
+          <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BnB</div>
+          {totalPoolAmount === BigInt(0) ? (
+            <div className="text-center text-gray-500">
+              No votes yet, be the first to vote!
+            </div>
+          ) : (
+            <>
+              <ResponsiveContainer width="100%" height={36}>
+                <BarChart
+                  data={chartData}
+                  layout="vertical"
+                  margin={{ top: 20, bottom: 0 }}
+                >
+                  <XAxis type="number" hide />
+                  <YAxis type="category" dataKey="name" hide />
+                  <Tooltip cursor={false} />
+                  <Bar
+                    dataKey="up"
+                    stackId="a"
+                    fill={chartConfig.up.color}
+                    barSize={20}
+                    radius={[10, 0, 0, 10]}
+                  />
+                  <Bar
+                    dataKey="down"
+                    stackId="a"
+                    fill={chartConfig.down.color}
+                    barSize={20}
+                    radius={[0, 10, 10, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+              {totalPoolAmount > 0 && (
+                <div className="flex justify-between text-lg mt-2">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-black text-[14px] font-bold self-baseline">Up</span>
+                    <span className="font-bold text-[28px]">{((Number(upAmount) / Number(totalPoolAmount)) * 100).toFixed(0)}%</span>
+                  </div>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-black text-[14px] font-bold self-baseline">Down</span>
+                    <span className="font-bold text-[28px]">{((Number(downAmount) / Number(totalPoolAmount)) * 100).toFixed(0)}%</span>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </CardHeader>
+
+      <CardContent className="mx-auto w-full max-w-sm max-h-auto bg-white text-black rounded-xl p-6 gap-5 flex flex-col">
         <div className="flex items-center font-bold">My Prediction</div>
         <div className="grid grid-cols-2">
           <div className="grid gap-2 items-center justify-center text-center">
@@ -217,19 +278,19 @@ export function GameDetailVote() {
             />
           </div>
         </div>
-        <div className="flex items-center font-bold">Betting Price</div>
+        <div className="flex items-center font-bold">Bet Amount</div>
         <div className="flex items-center gap-2">
-          <input
-            id="amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="0"
-            className="border-b border-[#B6B6B6] px-2 focus:outline-none w-full bg-white text-right text-lg text-gray-500"
-          />
-          <span className="text-black font-semibold mt-[5px] text-lg">BnB</span>
+        <input
+          id="amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="0"
+          className="border-b border-[#B6B6B6] px-2 focus:outline-none w-full bg-white text-right text-lg"
+        />
+          <span className="text-black mt-[5px] text-xl font-bold">BNB</span>
         </div>
         <button
-          className="w-[335px] h-[55px] rounded-xl bg-white text-black font-semibold shadow-md hover:shadow-lg focus:outline-none border border-[#B6B6B6] active:bg-gray-200 active:scale-95 transition-transform duration-75"
+          className="w-[335px] h-[55px] rounded-2xl bg-[#E9B603] text-white font-semibold shadow-md hover:shadow-lg focus:outline-none active:bg-gray-200 active:scale-95 transition-transform duration-75"
           onClick={handleBet}
         >
           Confirm

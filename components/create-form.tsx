@@ -32,7 +32,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const WNW_PRECOMPILE_ADDRESS = '0xe4f6f354a5e3c6bb3c3d8bdcad01e40724fa1ce7';
+const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
 export const CreateForm: React.FC = () => {
   const { writeContract } = useWriteContract();
   const { toast } = useToast();

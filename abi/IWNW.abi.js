@@ -76,14 +76,46 @@ const WNW_ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "duration",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "minAmount",
-				"type": "uint256"
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "startDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "gameTitle",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "endDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenAdress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "startPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					}
+				],
+				"internalType": "struct BetMeme.CreateGameParams",
+				"name": "params",
+				"type": "tuple"
 			}
 		],
 		"name": "createGame",
@@ -212,28 +244,23 @@ const WNW_ABI = [
 				"type": "uint256"
 			},
 			{
+				"internalType": "string",
+				"name": "gameTitle",
+				"type": "string"
+			},
+			{
 				"internalType": "uint256",
-				"name": "startTime",
+				"name": "startDate",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "duration",
+				"name": "endDate",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "markedPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "lastPrice",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "minAmount",
+				"name": "startPrice",
 				"type": "uint256"
 			},
 			{
@@ -252,9 +279,24 @@ const WNW_ABI = [
 				"type": "uint256"
 			},
 			{
+				"internalType": "string",
+				"name": "category",
+				"type": "string"
+			},
+			{
 				"internalType": "bool",
 				"name": "isEnded",
 				"type": "bool"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenAdress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
@@ -272,28 +314,23 @@ const WNW_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "gameTitle",
+						"type": "string"
+					},
+					{
 						"internalType": "uint256",
-						"name": "startTime",
+						"name": "startDate",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "duration",
+						"name": "endDate",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "markedPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "lastPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "minAmount",
+						"name": "startPrice",
 						"type": "uint256"
 					},
 					{
@@ -312,6 +349,11 @@ const WNW_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
+					},
+					{
 						"internalType": "bool",
 						"name": "isEnded",
 						"type": "bool"
@@ -320,6 +362,16 @@ const WNW_ABI = [
 						"internalType": "address[]",
 						"name": "betUsers",
 						"type": "address[]"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenAdress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
 					}
 				],
 				"internalType": "struct BetMeme.Game[]",
@@ -355,28 +407,23 @@ const WNW_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "gameTitle",
+						"type": "string"
+					},
+					{
 						"internalType": "uint256",
-						"name": "startTime",
+						"name": "startDate",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "duration",
+						"name": "endDate",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "markedPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "lastPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "minAmount",
+						"name": "startPrice",
 						"type": "uint256"
 					},
 					{
@@ -395,6 +442,11 @@ const WNW_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
+					},
+					{
 						"internalType": "bool",
 						"name": "isEnded",
 						"type": "bool"
@@ -403,6 +455,16 @@ const WNW_ABI = [
 						"internalType": "address[]",
 						"name": "betUsers",
 						"type": "address[]"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenAdress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
 					}
 				],
 				"internalType": "struct BetMeme.Game[]",
@@ -431,28 +493,23 @@ const WNW_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "gameTitle",
+						"type": "string"
+					},
+					{
 						"internalType": "uint256",
-						"name": "startTime",
+						"name": "startDate",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "duration",
+						"name": "endDate",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "markedPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "lastPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "minAmount",
+						"name": "startPrice",
 						"type": "uint256"
 					},
 					{
@@ -471,6 +528,11 @@ const WNW_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
+					},
+					{
 						"internalType": "bool",
 						"name": "isEnded",
 						"type": "bool"
@@ -479,6 +541,16 @@ const WNW_ABI = [
 						"internalType": "address[]",
 						"name": "betUsers",
 						"type": "address[]"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenAdress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
 					}
 				],
 				"internalType": "struct BetMeme.Game",
@@ -501,28 +573,23 @@ const WNW_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "gameTitle",
+						"type": "string"
+					},
+					{
 						"internalType": "uint256",
-						"name": "startTime",
+						"name": "startDate",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "duration",
+						"name": "endDate",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "markedPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "lastPrice",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "minAmount",
+						"name": "startPrice",
 						"type": "uint256"
 					},
 					{
@@ -541,6 +608,11 @@ const WNW_ABI = [
 						"type": "uint256"
 					},
 					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
+					},
+					{
 						"internalType": "bool",
 						"name": "isEnded",
 						"type": "bool"
@@ -549,6 +621,16 @@ const WNW_ABI = [
 						"internalType": "address[]",
 						"name": "betUsers",
 						"type": "address[]"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenAdress",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
 					}
 				],
 				"internalType": "struct BetMeme.Game[]",
