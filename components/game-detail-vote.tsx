@@ -4,18 +4,14 @@ import { Label } from 'recharts';
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from './ui/chart';
 import { RadialBarChart, PolarRadiusAxis, RadialBar } from 'recharts';
 import { useReadContract, useWriteContract } from 'wagmi';
 import WNW_ABI from '@/abi/IWNW.abi';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 const fetchTokenPrice = async (tokenAddress: string): Promise<number | null> => {
@@ -44,10 +40,9 @@ const fetchTokenPrice = async (tokenAddress: string): Promise<number | null> => 
 };
 
 export function GameDetailVote() {
-  const WNW_PRECOMPILE_ADDRESS = '0xe31bA092390628Aaf5faFda2F50bFD7d51C9e657';
+  const WNW_PRECOMPILE_ADDRESS = '0xFc5F3eC263E4efb55d1d4992066167990Db5edFf';
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
-  const [startPrice, setStartPrice] = useState<number | null>(null);
   const [currentPrice, setCurrentPrice] = useState<number | null>(null);
   const [betUp, setBetUp] = useState<boolean | null>(null); // Up/Down 선택 상태
   const [amount, setAmount] = useState(''); // Input 필드에 입력된 숫자
@@ -65,10 +60,7 @@ export function GameDetailVote() {
     if (game) {
       console.log('Game data:', game);
       const fetchPrices = async () => {
-        const startPrice = await fetchTokenPrice('0x55d398326f99059ff775485246999027b3197955');
         const currentPrice = await fetchTokenPrice('0x55d398326f99059ff775485246999027b3197955');
-
-        setStartPrice(startPrice);
         setCurrentPrice(currentPrice);
       };
 
@@ -76,7 +68,7 @@ export function GameDetailVote() {
     }
   }, [game]);
 
-  const { writeContract } = useWriteContract()
+  const { writeContract } = useWriteContract();
 
   const handleBet = async () => {
     console.log('gameId : ', game.gameId);
@@ -84,13 +76,14 @@ export function GameDetailVote() {
     console.log('betAmount : ', betAmount);
 
     writeContract({
-      WNW_ABI,
+      abi: WNW_ABI,
       address: WNW_PRECOMPILE_ADDRESS,
       functionName: 'bet',
       args: [
-        game.gameId, betUp, betAmount
+        game.gameId, betUp
       ],
-   })
+      value: betAmount
+    });
   };
 
   if (!game) {
@@ -117,11 +110,31 @@ export function GameDetailVote() {
   };
 
   return (
-    <Card className="mx-auto w-full max-w-sm max-h-auto bg-white text-black">
-      <CardHeader>
+    <Card className="grid gap-8 border-none mx-auto w-full max-w-sm text-black">
+       {/* <button className='text-white'
+          onClick={() => {
+            if (currentPrice !== null) {
+              writeContract({
+                abi: WNW_ABI,
+                address: WNW_PRECOMPILE_ADDRESS,
+                functionName: 'endGame',
+                args: [
+                  game.gameId,
+                  Math.floor(currentPrice * 10 ** 18)
+                ]
+              });
+            } else {
+              console.log("Current price is not available yet");
+            }
+          }}
+        >
+          End
+      </button> */}
+      <CardHeader className="mx-auto w-full max-w-sm max-h-auto bg-white text-black rounded-xl">
         <CardTitle className="text-lg">Pool status</CardTitle>
-      </CardHeader>
-      <CardContent className="grid gap-4">
+        <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BnB</div>
+        <div>Current Price: {currentPrice ? `${currentPrice} USD` : 'Loading...'}</div>
+        <div>Started Price: {game.markedPrice ? `${Number(game.markedPrice) / 10 ** 18} USD` : 'Loading...'}</div> {/* markedPrice 사용 */}
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square w-full max-w-[250px] mb-[-100px] mt-[-20px]"
@@ -181,9 +194,8 @@ export function GameDetailVote() {
             />
           </RadialBarChart>
         </ChartContainer>
-        <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BNB</div>
-        <div>Current Price: {currentPrice ? `${currentPrice} USD` : 'Loading...'}</div>
-        <div>Started Price: {startPrice ? `${startPrice} USD` : 'Loading...'}</div>
+      </CardHeader>
+      <CardContent className="mx-auto w-full max-w-sm max-h-auto bg-white text-black rounded-xl">
         <div className="flex items-center font-bold">My Prediction</div>
         <div className="grid grid-cols-2">
           <div className="grid gap-2 items-center justify-center text-center">
@@ -217,7 +229,7 @@ export function GameDetailVote() {
           <span className="text-black font-semibold mt-[5px] text-lg">BnB</span>
         </div>
         <button
-          className="w-[335px] h-[55px] rounded-lg bg-white text-black font-semibold shadow-md hover:shadow-lg focus:outline-none border border-[#B6B6B6] active:bg-gray-200 active:scale-95 transition-transform duration-75"
+          className="w-[335px] h-[55px] rounded-xl bg-white text-black font-semibold shadow-md hover:shadow-lg focus:outline-none border border-[#B6B6B6] active:bg-gray-200 active:scale-95 transition-transform duration-75"
           onClick={handleBet}
         >
           Confirm
