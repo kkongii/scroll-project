@@ -264,7 +264,7 @@ export const CreateForm: React.FC = () => {
               </FormControl>
             </FormItem>
             <FormItem>
-              <FormLabel>Due Date</FormLabel> 
+              <FormLabel>Duration</FormLabel> 
               <FormControl>
               <div className="w-full max-w-xl flex flex-col items-start gap-4">
                 <DateRangePicker
@@ -303,6 +303,23 @@ export const CreateForm: React.FC = () => {
                 </div>
               </FormControl>
             </FormItem>
+            <FormField
+                  control={form.control}
+                  name="mid"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Event date</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={loading}
+                          placeholder="Ex) 10th, July, 24"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />{' '}
             {type !== 'slot' && (
               <>
                 
