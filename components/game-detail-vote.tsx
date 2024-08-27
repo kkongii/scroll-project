@@ -7,61 +7,12 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer  } from 'recharts';
-import { ChartContainer,ChartConfig  } from '@/components/ui/chart';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { ChartContainer, ChartConfig } from '@/components/ui/chart';
 import { useReadContract, useWriteContract } from 'wagmi';
 import WNW_ABI from '@/abi/IWNW.abi';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-
-const fetchTokenPrice = async (tokenAddress: string): Promise<number | null> => {
-  try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${tokenAddress}&vs_currencies=usd`
-    );
-    if (!response.ok) {
-      throw new Error('Failed to fetch token price');
-    }
-
-    const data = await response.json();
-    console.log('API Response:', data);
-
-    const priceInUsd = data[tokenAddress.toLowerCase()]?.usd;
-
-    if (!priceInUsd) {
-      throw new Error('Price not found for the given token');
-    }
-
-    return priceInUsd;
-  } catch (error) {
-    console.error('Error fetching token price:', error);
-    return null;
-  }
-};
-
-const fetchTokenInfo = async (tokenAddress: string) => {
-  try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/binance-smart-chain/contract/${tokenAddress}`
-    );
-    if (!response.ok) {
-      throw new Error('Failed to fetch token info');
-    }
-
-    const data = await response.json();
-    console.log('Token Info:', data);
-
-    const tokenInfo = {
-      name: data.name,
-      image: data.image.thumb,
-    };
-
-    return tokenInfo;
-  } catch (error) {
-    console.error('Error fetching token info:', error);
-    return null;
-  }
-};
 
 export function GameDetailVote() {
   const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
@@ -70,7 +21,7 @@ export function GameDetailVote() {
   const [currentPrice, setCurrentPrice] = useState<number | null>(null);
   const [betUp, setBetUp] = useState<boolean | null>(null); // Up/Down 선택 상태
   const [amount, setAmount] = useState(''); // Input 필드에 입력된 숫자
-  const [tokenInfo, setTokenInfo] = useState<{name: string, image: string} | null>(null);
+  const [tokenInfo, setTokenInfo] = useState<{ name: string, image: string } | null>(null);
 
   const { data: game }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,
@@ -83,24 +34,22 @@ export function GameDetailVote() {
 
   useEffect(() => {
     if (game) {
-      console.log('Game data:', game);
-      const fetchPrices = async () => {
-        const currentPrice = await fetchTokenPrice('0x55d398326f99059ff775485246999027b3197955');
-        setCurrentPrice(currentPrice);
-      };
-
-      fetchPrices();
+      const startPrice = Number(game.startPrice) / 10 ** 18;
+  
+      const initialPriceChange = (Math.random() * 2 - 1) * 0.01; 
+      const initialPrice = Math.max(startPrice * (1 + initialPriceChange), 0);
+      setCurrentPrice(initialPrice);
+  
+      const intervalId = setInterval(() => {
+        const priceChange = (Math.random() * 2 - 1) * 0.01;
+        const newPrice = Math.max(startPrice * (1 + priceChange), 0);
+        setCurrentPrice(newPrice);
+      }, 20000);
+  
+      return () => clearInterval(intervalId);
     }
   }, [game]);
-
-  useEffect(() => {
-    const getTokenInfo = async () => {
-      const tokenInfo = await fetchTokenInfo('0x55d398326f99059ff775485246999027b3197955');
-      setTokenInfo(tokenInfo);
-    };
   
-    getTokenInfo();
-  }, []);
 
   const { writeContract } = useWriteContract();
 
@@ -136,15 +85,15 @@ export function GameDetailVote() {
     },
     down: {
       label: 'Down',
-      color: '#C73535', 
+      color: '#C73535',
     },
   };
-  
+
 
   const chartData = [
     { name: 'Votes', up: Number(upAmount) / 10 ** 18, down: Number(downAmount) / 10 ** 18 }
   ];
-  
+
 
   const endDate = Number(game.endDate) * 1000;
   const timeRemaining = endDate - Date.now();
@@ -171,7 +120,7 @@ export function GameDetailVote() {
           Live
         </div>
       );
-    
+
       if (timeRemaining < oneDayInMs) {
         buttons.push(
           <div
@@ -183,78 +132,79 @@ export function GameDetailVote() {
         );
       }
     }
-    
+
 
     return buttons;
   };
 
-
-
   return (
     <Card className="grid gap-8 border-none mx-auto w-full max-w-sm text-black">
       <CardHeader className="mx-auto w-full max-w-sm max-h-auto bg-white text-black rounded-xl p-6">
-          <CardTitle className="flex gap-2">
-            <div className='text-lg'>Pool status</div>
-            <div className="flex space-x-2 items-center">
-              {renderStatusButtons()}
-            </div>
-          </CardTitle>
-          <div className='flex space-between'>
-            <div className='flex flex-col gap-2 mb-2'>
-              <div>token Info</div>
-              <div className='text-3xl font-bold'>$ {currentPrice ? `${currentPrice.toFixed(2)}` : 'Loading...'}</div>
-            </div>
-            <div className='flex flex-col'>
-              <div className='font-bold'>Started: $ {game.startPrice ? `${Number(game.startPrice).toFixed(2)}` : 'Loading...'}</div>
-            </div>
+        <CardTitle className="flex gap-2">
+          <div className='text-lg'>Pool status</div>
+          <div className="flex space-x-2 items-center">
+            {renderStatusButtons()}
           </div>
-          <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BnB</div>
-          {totalPoolAmount === BigInt(0) ? (
-            <div className="text-center text-gray-500">
-              No votes yet, be the first to vote!
+        </CardTitle>
+        <div className='flex justify-between'>
+          <div className='flex flex-col gap-2 mb-2'>
+            <div>
+              {tokenInfo?.image && <img src={tokenInfo.image} alt={`${tokenInfo?.name} logo`} className="w-6 h-6" />}
+              <div>{tokenInfo?.name}</div>
             </div>
-          ) : (
-            <>
-              <ResponsiveContainer width="100%" height={36}>
-                <BarChart
-                  data={chartData}
-                  layout="vertical"
-                  margin={{ top: 20, bottom: 0 }}
-                >
-                  <XAxis type="number" hide />
-                  <YAxis type="category" dataKey="name" hide />
-                  <Tooltip cursor={false} />
-                  <Bar
-                    dataKey="up"
-                    stackId="a"
-                    fill={chartConfig.up.color}
-                    barSize={20}
-                    radius={[10, 0, 0, 10]}
-                  />
-                  <Bar
-                    dataKey="down"
-                    stackId="a"
-                    fill={chartConfig.down.color}
-                    barSize={20}
-                    radius={[0, 10, 10, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-              {totalPoolAmount > 0 && (
-                <div className="flex justify-between text-lg mt-2">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-black text-[14px] font-bold self-baseline">Up</span>
-                    <span className="font-bold text-[28px]">{((Number(upAmount) / Number(totalPoolAmount)) * 100).toFixed(0)}%</span>
-                  </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-black text-[14px] font-bold self-baseline">Down</span>
-                    <span className="font-bold text-[28px]">{((Number(downAmount) / Number(totalPoolAmount)) * 100).toFixed(0)}%</span>
-                  </div>
+            <div className='text-3xl font-bold'>$ {currentPrice ? `${currentPrice.toFixed(2)}` : 'Loading...'}</div>
+          </div>
+          <div className='flex flex-col'>
+            <div className='font-bold'>Started: $ {game.startPrice ? `${(Number(game.startPrice) / 10 ** 18).toFixed(2)}` : 'Loading...'}</div>
+          </div>
+        </div>
+        <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BnB</div>
+        {totalPoolAmount === BigInt(0) ? (
+          <div className="text-center text-gray-500">
+            No votes yet, be the first to vote!
+          </div>
+        ) : (
+          <>
+            <ResponsiveContainer width="100%" height={36}>
+              <BarChart
+                data={chartData}
+                layout="vertical"
+                margin={{ top: 20, bottom: 0 }}
+              >
+                <XAxis type="number" hide />
+                <YAxis type="category" dataKey="name" hide />
+                <Tooltip cursor={false} />
+                <Bar
+                  dataKey="up"
+                  stackId="a"
+                  fill={chartConfig.up.color}
+                  barSize={20}
+                  radius={[10, 0, 0, 10]}
+                />
+                <Bar
+                  dataKey="down"
+                  stackId="a"
+                  fill={chartConfig.down.color}
+                  barSize={20}
+                  radius={[0, 10, 10, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+            {totalPoolAmount > 0 && (
+              <div className="flex justify-between text-lg mt-2">
+                <div className="flex items-baseline gap-1">
+                  <span className="text-black text-[14px] font-bold self-baseline">Up</span>
+                  <span className="font-bold text-[28px]">{((Number(upAmount) / Number(totalPoolAmount)) * 100).toFixed(0)}%</span>
                 </div>
-              )}
-            </>
-          )}
-        </CardHeader>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-black text-[14px] font-bold self-baseline">Down</span>
+                  <span className="font-bold text-[28px]">{((Number(downAmount) / Number(totalPoolAmount)) * 100).toFixed(0)}%</span>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </CardHeader>
 
       <CardContent className="mx-auto w-full max-w-sm max-h-auto bg-white text-black rounded-xl p-6 gap-5 flex flex-col">
         <div className="flex items-center font-bold">My Prediction</div>
@@ -280,13 +230,13 @@ export function GameDetailVote() {
         </div>
         <div className="flex items-center font-bold">Bet Amount</div>
         <div className="flex items-center gap-2">
-        <input
-          id="amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          placeholder="0"
-          className="border-b border-[#B6B6B6] px-2 focus:outline-none w-full bg-white text-right text-lg"
-        />
+          <input
+            id="amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="0"
+            className="border-b border-[#B6B6B6] px-2 focus:outline-none w-full bg-white text-right text-lg"
+          />
           <span className="text-black mt-[5px] text-xl font-bold">BNB</span>
         </div>
         <button
