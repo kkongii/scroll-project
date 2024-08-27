@@ -12,7 +12,7 @@ import { useSearchParams } from 'next/navigation';
 export default function Page() {
   const [gameTitle, setGameTitle] = useState('');
   const [timeLeft, setTimeLeft] = useState('');
-  const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
+  const WNW_PRECOMPILE_ADDRESS = '0xd38aa26b0b558c19c61c3944ae87bb65786f425d';
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
 

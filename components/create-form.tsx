@@ -32,12 +32,11 @@ const formSchema = z.object({
   event_title: z.string().optional(),
   event_description: z.string().default('').optional(),
   event_category: z.string().default('').optional(),
-  event_date: z.string().default('').optional()
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
+const WNW_PRECOMPILE_ADDRESS = '0xd38aa26b0b558c19c61c3944ae87bb65786f425d';
 export const CreateForm: React.FC = () => {
   const { writeContract } = useWriteContract();
   const { toast } = useToast();
@@ -79,13 +78,13 @@ export const CreateForm: React.FC = () => {
         address: WNW_PRECOMPILE_ADDRESS,
         functionName: 'createGame',
         args: [
-          startDate.toDate().getTime(), // start date
-          data.event_title, // game title
-          endDate.toDate().getTime(), // end date
-          checkedAddress, // token address
-          data.event_category, // game category
-          123, // start price
-          data.event_description // description
+          startDate.toDate().getTime(),
+          endDate.toDate().getTime(),
+          data.event_category,
+          123,
+          data.event_description,
+          data.event_title,
+          // checkedAddress,
         ]
       });
       console.log('create game called');
