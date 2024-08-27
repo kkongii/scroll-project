@@ -15,59 +15,60 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+  AccordionTrigger
+} from '@/components/ui/accordion';
 
-const WNW_PRECOMPILE_ADDRESS = '0xFc5F3eC263E4efb55d1d4992066167990Db5edFf';
+const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
 
 export const GameDetail = () => {
   const params = useParams();
   const { id } = params as { id: string };
-  const { data: allGames }: any = useReadContract({
+
+  // 게임의 description을 저장할 상태를 선언합니다.
+  const [description, setDescription] = useState<string>('');
+
+  // getGame 함수로부터 gameId를 이용해 game의 상세 정보를 불러옵니다.
+  const {
+    data: game,
+    isLoading,
+    isError
+  } = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,
     abi: WNW_ABI,
-    functionName: 'getGameList'
+    functionName: 'getGame',
+    args: [BigInt(id)] // id를 BigInt로 변환하여 전달
   });
 
-  const [game, setGame] = useState<any>();
-
   useEffect(() => {
-    if (allGames) {
-      const findGame = allGames.find((game: any) => {
-        return game.gameId === BigInt(id);
-      });
-      setGame(findGame);
+    if (game && (game as any).description) {
+      setDescription((game as any).description);
     }
-  }, [allGames]);
+  }, [game]);
 
-  if (!allGames) {
-    return <></>;
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError || !description) {
+    return <div>Error loading game description or game not found.</div>;
   }
 
   return (
-    <Card className="w-full bg-white text-black -mb-10 pb-2.5">
-      <CardHeader className="flex flex-row items-end">
-        <CardTitle className="text-[24px] mt-2">‘What we need to know’</CardTitle>
-        <span className="text-[20px] ml-2">(Announcement Info)</span>
-      </CardHeader>
+    <Card className="-mb-10 w-full bg-white pb-2.5 text-black">
       <CardContent className="grid gap-4">
         <Accordion type="multiple">
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="text-black text-base text-[18px]">What is AMA(Ask Me Anything)</AccordionTrigger>
+          <AccordionItem value="item-1 border-0">
+            <AccordionTrigger className="text-[18px] text-base text-black">
+              What we need to know (Event Info)
+            </AccordionTrigger>
             <AccordionContent
-              className="text-[#575757] bg-[#E5E5E5] shadow-inner p-6"
-              style={{ boxShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1)' }}
+              className="border-0 bg-[#E5E5E5] p-6 text-[#575757] shadow-inner"
+              style={{
+                boxShadow:
+                  'inset 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1)'
+              }}
             >
-              An AMA (Ask Me Anything) is a live Q&A session where experts or project representatives answer questions from the audience, providing transparency and engaging directly with their community, often used to share updates and build trust.
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-2">
-            <AccordionTrigger className="text-black text-base text-[18px]">How the Recent AMA Drove a Surge in BNB Price</AccordionTrigger>
-            <AccordionContent
-              className="text-[#575757] bg-[#E5E5E5] shadow-inner p-6"
-              style={{ boxShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1)' }}
-            >
-              The latest AMA with Binance’s leadership revealed key updates, including new partnerships and tech upgrades, boosting investor confidence. This transparency and strategic outlook drove a noticeable increase in BNB demand, highlighting the AMA’s significant impact on market sentiment.
+              {description}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

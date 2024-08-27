@@ -45,7 +45,7 @@ const fetchTokenPrice = async (
   }
 };
 
-const WNW_PRECOMPILE_ADDRESS = '0xFc5F3eC263E4efb55d1d4992066167990Db5edFf';
+const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
 export const ScheduleList = () => {
   const { data: allGames }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,
@@ -67,7 +67,7 @@ export const ScheduleList = () => {
   );
   const closedGames = allGames.filter((game: any) => game.isEnded === true);
 
-  console.log(Date.now())
+  console.log(Date.now());
 
   return (
     <ScrollArea className="h-full">
