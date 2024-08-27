@@ -56,7 +56,7 @@ export const GameItem = ({ game }: any) => {
   // }, [game]);
 
   const tokenInfo = tokenInfos.find(
-    (item) => item.address === game.tokenAddress
+    (item) => item.address === game.tokenAdress
   );
 
   console.log(tokenInfo);

@@ -1,14 +1,7 @@
 'use client';
 import { useReadContract } from 'wagmi';
 import WNW_ABI from '@/abi/IWNW.abi';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {

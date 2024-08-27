@@ -2,7 +2,6 @@
 
 import { Label } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   BarChart,
   Bar,
@@ -16,6 +15,9 @@ import { useReadContract, useWriteContract } from 'wagmi';
 import WNW_ABI from '@/abi/IWNW.abi';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import Image from 'next/image';
+import { tokenInfos } from '@/constants';
 
 export function GameDetailVote() {
   const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
@@ -24,10 +26,11 @@ export function GameDetailVote() {
   const [currentPrice, setCurrentPrice] = useState<number | null>(null);
   const [betUp, setBetUp] = useState<boolean | null>(null); // Up/Down 선택 상태
   const [amount, setAmount] = useState(''); // Input 필드에 입력된 숫자
-  const [tokenInfo, setTokenInfo] = useState<{
-    name: string;
-    image: string;
-  } | null>(null);
+  const [clicked, setClicked] = useState(false);
+  // const [tokenInfo, setTokenInfo] = useState<{
+  //   name: string;
+  //   image: string;
+  // } | null>(null);
 
   const { data: game }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,
@@ -56,6 +59,14 @@ export function GameDetailVote() {
     }
   }, [game]);
 
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 로컬 스토리지에서 상태 로드
+    const storedState = localStorage.getItem('buttonClicked');
+    if (storedState === 'true') {
+      setClicked(true);
+    }
+  }, []);
+
   const { writeContract } = useWriteContract();
 
   const handleBet = async () => {
@@ -70,13 +81,22 @@ export function GameDetailVote() {
       args: [game.gameId, betUp],
       value: betAmount
     });
+    setClicked(true);
+    localStorage.setItem('buttonClicked', 'true');
+  };
+  const handleClaim = () => {
+    // Claim 버튼 클릭 시 실행할 로직
+    // ...
+    console.log('Claim function executed');
   };
 
   if (!game) {
     console.log('undefined');
     return <></>;
   }
-
+  const tokenInfo = tokenInfos.find(
+    (item: any) => item.address === game.tokenAdress
+  );
   const upAmount = game.upAmount ? BigInt(game.upAmount) : BigInt(0);
   const downAmount = game.downAmount ? BigInt(game.downAmount) : BigInt(0);
   const totalPoolAmount = upAmount + downAmount;
@@ -151,21 +171,60 @@ export function GameDetailVote() {
           </div>
         </CardTitle>
         <div className="flex justify-between">
-          <div className="mb-2 flex flex-col gap-2">
-            <div>
-              {tokenInfo?.image && (
-                <img
-                  src={tokenInfo.image}
-                  alt={`${tokenInfo?.name} logo`}
-                  className="h-6 w-6"
+          <div className="flex-colgap-2 mb-2 flex">
+            <div className="flex-col">
+              <div
+                className="relative flex flex-row gap-1"
+                style={{ width: '20px' }}
+              >
+                <Image
+                  src={tokenInfo?.image ?? '/logo.png'}
+                  alt="Logo"
+                  width={30}
+                  height={30}
+                  layout="intrinsic"
                 />
-              )}
-              <div>{tokenInfo?.name}</div>
-            </div>
-            <div className="text-3xl font-bold">
-              $ {currentPrice ? `${currentPrice.toFixed(2)}` : 'Loading...'}
+                <span className=" text-sm font-bold text-black">
+                  {tokenInfo?.name ?? 'Token Name'}
+                </span>
+              </div>
+              <div className="text-3xl font-bold">
+                $ {currentPrice ? `${currentPrice.toFixed(2)}` : 'Loading...'}
+              </div>
+
+              <div className="flex items-center">
+                {currentPrice !== null && game.startPrice !== null ? (
+                  <div className="flex items-center">
+                    {Number(currentPrice) >
+                    Number(game.startPrice) / 10 ** 18 ? (
+                      <div className="flex items-center text-green-600">
+                        <FaArrowUp className="mr-1" />
+                        {Number(
+                          ((currentPrice - Number(game.startPrice) / 10 ** 18) /
+                            (Number(game.startPrice) / 10 ** 18)) *
+                            100
+                        ).toFixed(2)}
+                        %
+                      </div>
+                    ) : (
+                      <div className="flex items-center text-red-600">
+                        <FaArrowDown className="mr-1" />
+                        {Number(
+                          ((Number(game.startPrice) / 10 ** 18 - currentPrice) /
+                            (Number(game.startPrice) / 10 ** 18)) *
+                            100
+                        ).toFixed(2)}
+                        %
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div>Price data not available</div>
+                )}
+              </div>
             </div>
           </div>
+
           <div className="flex flex-col">
             <div className="font-bold">
               Started: ${' '}
@@ -173,9 +232,12 @@ export function GameDetailVote() {
                 ? `${(Number(game.startPrice) / 10 ** 18).toFixed(2)}`
                 : 'Loading...'}
             </div>
+            <div className=" text-end text-xs">
+              <div>Total Pool Amount:</div>
+              <div>{Number(totalPoolAmount) / 10 ** 18} BNB</div>
+            </div>
           </div>
         </div>
-        <div>Total Pool Amount: {Number(totalPoolAmount) / 10 ** 18} BnB</div>
         {totalPoolAmount === BigInt(0) ? (
           <div className="text-center text-gray-500">
             No votes yet, be the first to vote!
@@ -240,7 +302,13 @@ export function GameDetailVote() {
       </CardHeader>
 
       <CardContent className="max-h-auto mx-auto flex w-full max-w-sm flex-col gap-5 rounded-xl bg-white p-6 text-black">
-        <div className="flex items-center font-bold">My Prediction</div>
+        <div className=" justify-between">
+          <div className="flex items-center text-2xl font-bold">Predict</div>
+          <div>
+            <div className="text-sm font-bold">Ended Price would be...</div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-2">
           <div className="grid items-center justify-center gap-2 text-center">
             <Label>Up</Label>
@@ -274,13 +342,28 @@ export function GameDetailVote() {
             placeholder="0"
             className="w-full border-b border-[#B6B6B6] bg-white px-2 text-right text-lg focus:outline-none"
           />
-          <span className="mt-[5px] text-xl font-bold text-black">BNB</span>
+
+          <Image
+            src={tokenInfo?.image ?? '/logo.png'}
+            alt="Logo"
+            width={25}
+            height={25}
+            className="mr-0"
+          />
+          <span className=" text-xl font-bold text-black">
+            {tokenInfo?.name ?? 'Token Name'}
+          </span>
         </div>
         <button
-          className="h-[55px] w-[335px] rounded-2xl bg-[#E9B603] font-semibold text-white shadow-md transition-transform duration-75 hover:shadow-lg focus:outline-none active:scale-95 active:bg-gray-200"
-          onClick={handleBet}
+          className={`h-[55px] w-[335px] rounded-2xl font-semibold text-white shadow-md transition-transform duration-75 focus:outline-none ${
+            clicked && !game.isEnded
+              ? 'cursor-not-allowed bg-gray-400'
+              : 'bg-[#E9B603] hover:shadow-lg active:scale-95 active:bg-gray-200'
+          }`}
+          onClick={game.isEnded ? handleClaim : handleBet}
+          disabled={clicked && !game.isEnded}
         >
-          Confirm
+          {game.isEnded ? 'Claim' : clicked ? 'Not ended' : 'Confirm'}
         </button>
       </CardContent>
     </Card>
