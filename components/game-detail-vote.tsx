@@ -2,6 +2,7 @@
 
 import { Label } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   BarChart,
   Bar,
@@ -15,57 +16,6 @@ import { useReadContract, useWriteContract } from 'wagmi';
 import WNW_ABI from '@/abi/IWNW.abi';
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
-
-const fetchTokenPrice = async (
-  tokenAddress: string
-): Promise<number | null> => {
-  try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${tokenAddress}&vs_currencies=usd`
-    );
-    if (!response.ok) {
-      throw new Error('Failed to fetch token price');
-    }
-
-    const data = await response.json();
-    console.log('API Response:', data);
-
-    const priceInUsd = data[tokenAddress.toLowerCase()]?.usd;
-
-    if (!priceInUsd) {
-      throw new Error('Price not found for the given token');
-    }
-
-    return priceInUsd;
-  } catch (error) {
-    console.error('Error fetching token price:', error);
-    return null;
-  }
-};
-
-const fetchTokenInfo = async (tokenAddress: string) => {
-  try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/coins/binance-smart-chain/contract/${tokenAddress}`
-    );
-    if (!response.ok) {
-      throw new Error('Failed to fetch token info');
-    }
-
-    const data = await response.json();
-    console.log('Token Info:', data);
-
-    const tokenInfo = {
-      name: data.name,
-      image: data.image.thumb
-    };
-
-    return tokenInfo;
-  } catch (error) {
-    console.error('Error fetching token info:', error);
-    return null;
-  }
-};
 
 export function GameDetailVote() {
   const WNW_PRECOMPILE_ADDRESS = '0x33162C0C63cb323A355Bd1fAC34f7285858bda38';
@@ -90,28 +40,21 @@ export function GameDetailVote() {
 
   useEffect(() => {
     if (game) {
-      console.log('Game data:', game);
-      const fetchPrices = async () => {
-        const currentPrice = await fetchTokenPrice(
-          '0x55d398326f99059ff775485246999027b3197955'
-        );
-        setCurrentPrice(currentPrice);
-      };
+      const startPrice = Number(game.startPrice) / 10 ** 18;
 
-      fetchPrices();
+      const initialPriceChange = (Math.random() * 2 - 1) * 0.01;
+      const initialPrice = Math.max(startPrice * (1 + initialPriceChange), 0);
+      setCurrentPrice(initialPrice);
+
+      const intervalId = setInterval(() => {
+        const priceChange = (Math.random() * 2 - 1) * 0.01;
+        const newPrice = Math.max(startPrice * (1 + priceChange), 0);
+        setCurrentPrice(newPrice);
+      }, 20000);
+
+      return () => clearInterval(intervalId);
     }
   }, [game]);
-
-  useEffect(() => {
-    const getTokenInfo = async () => {
-      const tokenInfo = await fetchTokenInfo(
-        '0x55d398326f99059ff775485246999027b3197955'
-      );
-      setTokenInfo(tokenInfo);
-    };
-
-    getTokenInfo();
-  }, []);
 
   const { writeContract } = useWriteContract();
 
@@ -207,9 +150,18 @@ export function GameDetailVote() {
             {renderStatusButtons()}
           </div>
         </CardTitle>
-        <div className="space-between flex">
+        <div className="flex justify-between">
           <div className="mb-2 flex flex-col gap-2">
-            <div>token Info</div>
+            <div>
+              {tokenInfo?.image && (
+                <img
+                  src={tokenInfo.image}
+                  alt={`${tokenInfo?.name} logo`}
+                  className="h-6 w-6"
+                />
+              )}
+              <div>{tokenInfo?.name}</div>
+            </div>
             <div className="text-3xl font-bold">
               $ {currentPrice ? `${currentPrice.toFixed(2)}` : 'Loading...'}
             </div>
@@ -218,7 +170,7 @@ export function GameDetailVote() {
             <div className="font-bold">
               Started: ${' '}
               {game.startPrice
-                ? `${Number(game.startPrice).toFixed(2)}`
+                ? `${(Number(game.startPrice) / 10 ** 18).toFixed(2)}`
                 : 'Loading...'}
             </div>
           </div>
