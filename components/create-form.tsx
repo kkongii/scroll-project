@@ -22,6 +22,9 @@ import { useWriteContract } from 'wagmi';
 import { DatePicker } from '@nextui-org/react';
 import { now } from '@internationalized/date';
 import { tokenInfos } from '@/constants';
+import { ethers } from 'ethers';
+
+// 사용 예시
 
 const formSchema = z.object({
   project_name: z.string().default('').optional(),
@@ -48,22 +51,27 @@ export const CreateForm: React.FC = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema)
   });
-  console.log(tokenInfos);
+
   const onSubmit = async (data: FormValues) => {
     try {
+      const address = data.project_token_address;
+
+      const checkedAddress = ethers.getAddress(address ?? '');
+      console.log(checkedAddress);
+
       console.log(
         startDate.toDate().getTime(),
         (endDate.toDate().getTime() - new Date().getTime()) / 60 / 1000, //분 단위로 나옴
         data
       );
       console.log(
-        startDate.toDate().getTime() / 1000,
-        data.event_title,
-        endDate.toDate().getTime() / 1000,
-        data.project_token_address,
-        data.event_category,
-        Math.random(),
-        data.event_description
+        typeof startDate.toDate().getTime(), // start date
+        typeof data.event_title, // game title
+        typeof endDate.toDate().getTime(), // end date
+        typeof checkedAddress, // token address
+        typeof data.event_category, // game category
+        typeof 123, // start price
+        typeof data.event_description // description
       );
       setLoading(true);
       writeContract({
@@ -71,16 +79,18 @@ export const CreateForm: React.FC = () => {
         address: WNW_PRECOMPILE_ADDRESS,
         functionName: 'createGame',
         args: [
-          startDate.toDate().getTime() / 1000,
-          data.event_title,
-          endDate.toDate().getTime() / 1000,
-          data.project_token_address,
-          data.event_category,
-          Math.random(),
-          data.event_description
+          startDate.toDate().getTime(), // start date
+          data.event_title, // game title
+          endDate.toDate().getTime(), // end date
+          checkedAddress, // token address
+          data.event_category, // game category
+          123, // start price
+          data.event_description // description
         ]
       });
+      console.log('create game called');
     } catch (error: any) {
+      console.log(error);
       toast({
         variant: 'destructive',
         title: 'Uh oh! Something went wrong.',
