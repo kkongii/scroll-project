@@ -32,6 +32,7 @@ const formSchema = z.object({
   event_title: z.string().optional(),
   event_description: z.string().default('').optional(),
   event_category: z.string().default('').optional(),
+  event_date: z.string().default('').optional()
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -83,7 +84,7 @@ export const CreateForm: React.FC = () => {
           data.event_category,
           123,
           data.event_description,
-          data.event_title,
+          data.event_title
           // checkedAddress,
         ]
       });

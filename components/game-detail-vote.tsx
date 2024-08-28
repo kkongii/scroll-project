@@ -43,7 +43,7 @@ export function GameDetailVote() {
 
   useEffect(() => {
     if (game) {
-      const startPrice = Number(game.startPrice) / 10 ** 18;
+      const startPrice = Number(game.startPrice);
 
       const initialPriceChange = (Math.random() * 2 - 1) * 0.01;
       const initialPrice = Math.max(startPrice * (1 + initialPriceChange), 0);
@@ -194,13 +194,12 @@ export function GameDetailVote() {
               <div className="flex items-center">
                 {currentPrice !== null && game.startPrice !== null ? (
                   <div className="flex items-center">
-                    {Number(currentPrice) >
-                    Number(game.startPrice) / 10 ** 18 ? (
+                    {Number(currentPrice) > Number(game.startPrice) ? (
                       <div className="flex items-center text-green-600">
                         <FaArrowUp className="mr-1" />
                         {Number(
-                          ((currentPrice - Number(game.startPrice) / 10 ** 18) /
-                            (Number(game.startPrice) / 10 ** 18)) *
+                          ((currentPrice - Number(game.startPrice)) /
+                            Number(game.startPrice)) *
                             100
                         ).toFixed(2)}
                         %
@@ -209,8 +208,8 @@ export function GameDetailVote() {
                       <div className="flex items-center text-red-600">
                         <FaArrowDown className="mr-1" />
                         {Number(
-                          ((Number(game.startPrice) / 10 ** 18 - currentPrice) /
-                            (Number(game.startPrice) / 10 ** 18)) *
+                          ((Number(game.startPrice) - currentPrice) /
+                            Number(game.startPrice)) *
                             100
                         ).toFixed(2)}
                         %
@@ -228,7 +227,7 @@ export function GameDetailVote() {
             <div className="font-bold">
               Started: ${' '}
               {game.startPrice
-                ? `${(Number(game.startPrice) / 10 ** 18).toFixed(2)}`
+                ? `${Number(game.startPrice).toFixed(2)}`
                 : 'Loading...'}
             </div>
             <div className=" text-end text-xs">

@@ -12,5 +12,12 @@ export const tokenInfos = [
     id: 0,
     image:
       'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880'
-  }
+  },
+  {
+    name: 'WTON',
+    address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    id: 2,
+    image:
+      'https://assets.coingecko.com/coins/images/17980/standard/img-ton.jpg?1724681212'
+  },
 ];
