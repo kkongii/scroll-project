@@ -43,7 +43,7 @@ export function GameDetailVote() {
 
   useEffect(() => {
     if (game) {
-      const startPrice = Number(game.startPrice);
+      const startPrice = Number(game.startPrice)/10 ** 18;
 
       const initialPriceChange = (Math.random() * 2 - 1) * 0.01;
       const initialPrice = Math.max(startPrice * (1 + initialPriceChange), 0);
@@ -227,7 +227,7 @@ export function GameDetailVote() {
             <div className="font-bold">
               Started: ${' '}
               {game.startPrice
-                ? `${Number(game.startPrice).toFixed(2)}`
+                ? `${(Number(game.startPrice)/10**18).toFixed(2)}`
                 : 'Loading...'}
             </div>
             <div className=" text-end text-xs">
@@ -373,7 +373,7 @@ export function GameDetailVote() {
                 functionName: 'endGame',
                 args: [
                   game.gameId,
-                  currentPrice.toFixed(0)
+                  currentPrice* 10**18
                 ]
               });
             } else {

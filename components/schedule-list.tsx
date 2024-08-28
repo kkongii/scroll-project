@@ -31,11 +31,11 @@ export const ScheduleList = () => {
   }
 
   const tbcGames = allGames.filter(
-    (game: any) => Number(game.startDate) > Date.now()
+    (game: any) => game.startDate> Date.now()
   );
   const ongoingGames = allGames.filter(
     (game: any) =>
-      Number(game.startDate)< Date.now() && game.isEnded !== true
+      game.startDate< Date.now() && game.isEnded !== true
   );
   const closedGames = allGames.filter((game: any) => game.isEnded === true);
 

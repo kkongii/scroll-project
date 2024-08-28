@@ -24,8 +24,6 @@ import { now } from '@internationalized/date';
 import { tokenInfos } from '@/constants';
 import { ethers } from 'ethers';
 
-// 사용 예시
-
 const formSchema = z.object({
   project_name: z.string().default('').optional(),
   project_token_address: z.string().optional(),
@@ -38,6 +36,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const WNW_PRECOMPILE_ADDRESS = '0xd38aa26b0b558c19c61c3944ae87bb65786f425d';
+
 export const CreateForm: React.FC = () => {
   const { writeContract } = useWriteContract();
   const { toast } = useToast();
@@ -56,12 +55,23 @@ export const CreateForm: React.FC = () => {
     try {
       const address = data.project_token_address;
 
+      // 입력받은 address와 일치하는 tokenInfo를 찾음
+      const tokenInfo = tokenInfos.find(
+        (item) => item.address.toLowerCase() === address?.toLowerCase()
+      );
+
+      if (!tokenInfo) {
+        throw new Error('Token not found');
+      }
+
+      const startPrice = tokenInfo.startPrice;
+
       const checkedAddress = ethers.getAddress(address ?? '');
       console.log(checkedAddress);
 
       console.log(
         startDate.toDate().getTime(),
-        (endDate.toDate().getTime() - new Date().getTime()) / 60 / 1000, //분 단위로 나옴
+        (endDate.toDate().getTime() - new Date().getTime()) / 60 / 1000, // 분 단위로 나옴
         data
       );
       console.log(
@@ -70,24 +80,25 @@ export const CreateForm: React.FC = () => {
         typeof endDate.toDate().getTime(), // end date
         typeof checkedAddress, // token address
         typeof data.event_category, // game category
-        typeof 123, // start price
+        typeof startPrice, // start price
         typeof data.event_description // description
       );
+
       setLoading(true);
       writeContract({
         abi: WNW_ABI,
         address: WNW_PRECOMPILE_ADDRESS,
         functionName: 'createGame',
         args: [
-          startDate.toDate().getTime(),
-          endDate.toDate().getTime(),
-          data.event_category,
-          123,
-          data.event_description,
-          data.event_title
-          // checkedAddress,
+          startDate.toDate().getTime(), // 게임 시작 시간
+          endDate.toDate().getTime(), // 게임 종료 시간
+          data.event_category, // 게임 카테고리
+          startPrice, // 해당 토큰의 시작 가격
+          data.event_description, // 이벤트 설명
+          data.event_title, // 이벤트 제목
         ]
       });
+
       console.log('create game called');
     } catch (error: any) {
       console.log(error);
