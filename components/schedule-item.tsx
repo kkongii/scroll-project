@@ -15,11 +15,15 @@ import { tokenInfos } from '@/constants';
 export const ScheduleItem = ({ game }: any) => {
   const tokenInfo = tokenInfos.find((item) => item.id === Number(game.gameId));
 
+  // BigInt를 Number로 변환
+  const startDate = new Date(Number(game.startDate));
+  const endDate = new Date(Number(game.endDate));
+
   return (
     <div key={game.gameId}>
       <Card className="my-4 w-96 w-full cursor-pointer hover:shadow-lg">
         <CardHeader>
-          <CardTitle className="flex">
+          <CardTitle className="flex mt-2">
             <Image
               src={tokenInfo?.image ?? '/logo.png'}
               alt="Logo"
@@ -33,7 +37,10 @@ export const ScheduleItem = ({ game }: any) => {
           <hr className="border-t" />
         </CardHeader>
         <CardContent className="grid gap-4">
-          <h1 className="text-lg font-bold">{game.description}</h1>
+          <div className="flex flex-col text-lg text-muted-foreground text-white font-bold">
+            <span>Start Date: {startDate.toLocaleDateString()}  ~  End Date: {endDate.toLocaleDateString()}</span>
+          </div>
+          <h1 className="text-lg ">{game.description}</h1>
         </CardContent>
         <CardFooter>
           <CardDescription>
