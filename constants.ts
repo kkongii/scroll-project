@@ -20,4 +20,11 @@ export const tokenInfos = [
     image:
       'https://assets.coingecko.com/coins/images/17980/standard/img-ton.jpg?1724681212'
   },
+  {
+    name: 'Pepe',
+    address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    id: 3,
+    image:
+      'https://assets.coingecko.com/coins/images/29850/standard/pepe-token.jpeg?1696528776'
+  },
 ];
