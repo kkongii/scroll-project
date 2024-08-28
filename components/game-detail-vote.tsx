@@ -61,11 +61,11 @@ export function GameDetailVote() {
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 로컬 스토리지에서 상태 로드
-    const storedState = localStorage.getItem('buttonClicked');
+    const storedState = localStorage.getItem(`buttonClicked_${key}`);
     if (storedState === 'true') {
       setClicked(true);
     }
-  }, []);
+  }, [game]);
 
   const { writeContract } = useWriteContract();
 
@@ -82,7 +82,7 @@ export function GameDetailVote() {
       value: betAmount
     });
     setClicked(true);
-    localStorage.setItem('buttonClicked', 'true');
+    localStorage.setItem(`buttonClicked_${key}`, 'true');
   };
   const handleClaim = () => {
     // Claim 버튼 클릭 시 실행할 로직
@@ -94,9 +94,8 @@ export function GameDetailVote() {
     console.log('undefined');
     return <></>;
   }
-  const tokenInfo = tokenInfos.find(
-    (item: any) => item.address === game.tokenAdress
-  );
+  const tokenInfo = tokenInfos.find((item) => item.id === Number(game.gameId));
+
   const upAmount = game.upAmount ? BigInt(game.upAmount) : BigInt(0);
   const downAmount = game.downAmount ? BigInt(game.downAmount) : BigInt(0);
   const totalPoolAmount = upAmount + downAmount;
@@ -333,7 +332,9 @@ export function GameDetailVote() {
             />
           </div>
         </div>
-        <div className="flex items-center font-bold">Bet Amount</div>
+        <div className="flex flex-row justify-between">
+          <div className="flex items-center font-bold">Bet Amount</div>
+        </div>
         <div className="flex items-center gap-2">
           <input
             id="amount"
@@ -344,15 +345,13 @@ export function GameDetailVote() {
           />
 
           <Image
-            src={tokenInfo?.image ?? '/logo.png'}
+            src="https://assets.coingecko.com/coins/images/825/standard/bnb-icon2_2x.png?1696501970"
             alt="Logo"
             width={25}
             height={25}
             className="mr-0"
           />
-          <span className=" text-xl font-bold text-black">
-            {tokenInfo?.name ?? 'Token Name'}
-          </span>
+          <span className=" text-xl font-bold text-black">BNB</span>
         </div>
         <button
           className={`h-[55px] w-[335px] rounded-2xl font-semibold text-white shadow-md transition-transform duration-75 focus:outline-none ${

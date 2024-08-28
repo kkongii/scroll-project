@@ -18,32 +18,6 @@ import { Calendar } from '@/components/ui/calendar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScheduleItem } from './schedule-item';
-const fetchTokenPrice = async (
-  tokenAddress: string
-): Promise<number | null> => {
-  try {
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${tokenAddress}&vs_currencies=usd`
-    );
-    if (!response.ok) {
-      throw new Error('Failed to fetch token price');
-    }
-
-    const data = await response.json();
-    console.log('API Response:', data);
-
-    const priceInUsd = data[tokenAddress.toLowerCase()]?.usd;
-
-    if (!priceInUsd) {
-      throw new Error('Price not found for the given token');
-    }
-
-    return priceInUsd;
-  } catch (error) {
-    console.error('Error fetching token price:', error);
-    return null;
-  }
-};
 
 const WNW_PRECOMPILE_ADDRESS = '0xd38aa26b0b558c19c61c3944ae87bb65786f425d';
 export const ScheduleList = () => {
@@ -129,7 +103,6 @@ export const ScheduleList = () => {
                 <TabsContent value="tbc" className="space-y-4">
                   {tbcGames &&
                     tbcGames.map((game: any) => {
-                      return;
                       return <ScheduleItem key={game.id} game={game} />;
                     })}
                 </TabsContent>

@@ -15,19 +15,14 @@ const generateRandomWalletAddress = () => {
   }
   return address;
 };
-
+// 서로 다른 지갑 주소 생성
+const walletAddresses = Array.from({ length: 8 }, generateRandomWalletAddress);
 // 지갑 주소를 축약하는 함수
 const shortenAddress = (address: any) => {
   return `${address.slice(0, 6)}...${address.slice(-6)}`;
 };
 
 export const GameDetailComment = () => {
-  // 서로 다른 지갑 주소 생성
-  const walletAddresses = Array.from(
-    { length: 8 },
-    generateRandomWalletAddress
-  );
-
   return (
     <div className="space-y-4">
       <div className="flex items-center space-x-2">

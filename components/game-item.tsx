@@ -54,10 +54,7 @@ export const GameItem = ({ game }: any) => {
 
   //   fetchPrices();
   // }, [game]);
-
-  const tokenInfo = tokenInfos.find(
-    (item) => item.address === game.tokenAdress
-  );
+  const tokenInfo = tokenInfos.find((item) => item.id === Number(game.gameId));
 
   console.log(tokenInfo);
 

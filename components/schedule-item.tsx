@@ -10,33 +10,36 @@ import {
 } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from './ui/button';
+import { tokenInfos } from '@/constants';
+
 export const ScheduleItem = ({ game }: any) => {
+  const tokenInfo = tokenInfos.find((item) => item.id === Number(game.gameId));
+
   return (
     <div key={game.gameId}>
       <Card className="my-4 w-96 w-full cursor-pointer hover:shadow-lg">
         <CardHeader>
           <CardTitle className="flex">
             <Image
-              src="/logo.png"
+              src={tokenInfo?.image ?? '/logo.png'}
               alt="Logo"
               width={30}
               height={30}
-              className="mb-4 mr-2"
+              layout="intrinsic"
+              className="mx-1"
             />
-            {game.gameTitle}
+            {tokenInfo?.name ?? 'Token Name'}
           </CardTitle>
           <hr className="border-t" />
         </CardHeader>
         <CardContent className="grid gap-4">
-          <h1 className="text-lg font-bold">
-            After AMA, predict changes in token price
-          </h1>
+          <h1 className="text-lg font-bold">{game.description}</h1>
         </CardContent>
         <CardFooter>
           <CardDescription>
             <div className="flex justify-between text-sm text-muted-foreground">
               <div className="flex items-center">
-                Started: ${Number(game.markedPrice)}
+                Started: ${Number(game.startPrice)}
               </div>
               <Link
                 href={`/games/${game.gameId}?key=${game.gameId}`}
