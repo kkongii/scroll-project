@@ -50,7 +50,7 @@ export function GameDetailVote() {
 
   useEffect(() => {
     if (game) {
-      const startPrice = Number(game.startPrice);
+      const startPrice = Number(game.startPrice)/10 ** 18;
 
       const initialPriceChange = (Math.random() * 3 - 1) * 0.01;
       const initialPrice = Math.max(startPrice * (1 + initialPriceChange), 0);
@@ -229,7 +229,7 @@ export function GameDetailVote() {
             <div className="font-bold">
               Started: ${' '}
               {game.startPrice
-                ? `${Number(game.startPrice).toFixed(2)}`
+                ? `${(Number(game.startPrice)/10**18).toFixed(2)}`
                 : 'Loading...'}
             </div>
             <div className=" text-end text-xs">
@@ -387,6 +387,7 @@ export function GameDetailVote() {
           {game.isEnded ? 'Game Ended' : clicked ? 'Not ended' : 'Confirm'}
         </button>
       </CardContent>
+<<<<<<< HEAD
       <button
         className="text-bold rounded bg-white"
         onClick={() => {
@@ -405,6 +406,27 @@ export function GameDetailVote() {
       >
         End game
       </button>
+=======
+      <button className='text-bold bg-white rounded'
+          onClick={() => {
+            if (currentPrice !== null) {
+              writeContract({
+                abi: WNW_ABI,
+                address: WNW_PRECOMPILE_ADDRESS,
+                functionName: 'endGame',
+                args: [
+                  game.gameId,
+                  currentPrice* 10**18
+                ]
+              });
+            } else {
+              console.log("Current price is not available yet");
+            }
+          }}
+        >
+          End game
+        </button>
+>>>>>>> d95f45b55a0790255b9aaeae61f4416683a51dd8
     </Card>
   );
 }

@@ -3,7 +3,15 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Wise and Weird',
-  description: 'Wise and Weird - Prediction Market'
+  description: 'Wise and Weird - Prediction Market',
+  twitter: {
+    card: 'summary',
+    site: '@web3BlueNode',
+    title: 'Wise and Weird',
+    description:
+      'Predict price movement and profit from the community powered official events, making precise decisions',
+    images: 'https://bnb-wnw.online/twitter-img.png'
+  }
 };
 
 export default function DashboardLayout({
