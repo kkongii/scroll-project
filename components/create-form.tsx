@@ -35,7 +35,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const WNW_PRECOMPILE_ADDRESS = '0xd38aa26b0b558c19c61c3944ae87bb65786f425d';
+const WNW_PRECOMPILE_ADDRESS = '0x8b6eC36dB2Cc17D3b16D52DdA334238F24EE7Ed6';
 
 export const CreateForm: React.FC = () => {
   const { writeContract } = useWriteContract();
@@ -95,7 +95,7 @@ export const CreateForm: React.FC = () => {
           data.event_category, // 게임 카테고리
           startPrice, // 해당 토큰의 시작 가격
           data.event_description, // 이벤트 설명
-          data.event_title, // 이벤트 제목
+          data.event_title // 이벤트 제목
         ]
       });
 

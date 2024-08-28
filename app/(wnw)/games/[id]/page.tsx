@@ -17,7 +17,7 @@ export default function Page() {
   const [timeLeft, setTimeLeft] = useState('');
   const [tokenName, setTokenName] = useState('');
   const [category, setCategory] = useState('');
-  const WNW_PRECOMPILE_ADDRESS = '0xd38aa26b0b558c19c61c3944ae87bb65786f425d';
+  const WNW_PRECOMPILE_ADDRESS = '0x8b6eC36dB2Cc17D3b16D52DdA334238F24EE7Ed6';
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
   const url = 'https://bnb-wnw.online/';

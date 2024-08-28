@@ -19,7 +19,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScheduleItem } from './schedule-item';
 
-const WNW_PRECOMPILE_ADDRESS = '0xd38aa26b0b558c19c61c3944ae87bb65786f425d';
+const WNW_PRECOMPILE_ADDRESS = '0x8b6eC36dB2Cc17D3b16D52DdA334238F24EE7Ed6';
 export const ScheduleList = () => {
   const { data: allGames }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,
@@ -30,12 +30,9 @@ export const ScheduleList = () => {
     return <></>;
   }
 
-  const tbcGames = allGames.filter(
-    (game: any) => game.startDate> Date.now()
-  );
+  const tbcGames = allGames.filter((game: any) => game.startDate > Date.now());
   const ongoingGames = allGames.filter(
-    (game: any) =>
-      game.startDate< Date.now() && game.isEnded !== true
+    (game: any) => game.startDate < Date.now() && game.isEnded !== true
   );
   const closedGames = allGames.filter((game: any) => game.isEnded === true);
 
