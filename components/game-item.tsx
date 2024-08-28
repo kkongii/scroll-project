@@ -110,9 +110,9 @@ export const GameItem = ({ game }: any) => {
         <CardFooter>
           <CardDescription>
             <div className="flex justify-between text-sm text-muted-foreground">
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 Started: ${startPrice ? `${startPrice}` : 'Loading...'}
-              </div>
+              </div> */}
               <Link
                 href={`/games/${game.gameId}?key=${game.gameId}`}
                 key={game.gameId}

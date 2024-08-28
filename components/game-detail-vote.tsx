@@ -364,6 +364,25 @@ export function GameDetailVote() {
           {game.isEnded ? 'Claim' : clicked ? 'Not ended' : 'Confirm'}
         </button>
       </CardContent>
+      <button className='text-bold bg-white rounded'
+          onClick={() => {
+            if (currentPrice !== null) {
+              writeContract({
+                abi: WNW_ABI,
+                address: WNW_PRECOMPILE_ADDRESS,
+                functionName: 'endGame',
+                args: [
+                  game.gameId,
+                  currentPrice.toFixed(0)
+                ]
+              });
+            } else {
+              console.log("Current price is not available yet");
+            }
+          }}
+        >
+          End game
+        </button>
     </Card>
   );
 }
