@@ -62,12 +62,12 @@ export const GameDetail = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="item-2">
-            <AccordionTrigger className="text-black text-base text-[18px]">How the Recent AMA Drove a Surge in BNB Price</AccordionTrigger>
+            <AccordionTrigger className="text-black text-base text-[18px]">How Prediction Markets Leverage Collective Wisdom</AccordionTrigger>
             <AccordionContent
               className="text-[#575757] bg-[#E5E5E5] shadow-inner p-6"
               style={{ boxShadow: 'inset 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.1)' }}
             >
-              The latest AMA with Binance’s leadership revealed key updates, including new partnerships and tech upgrades, boosting investor confidence. This transparency and strategic outlook drove a noticeable increase in BNB demand, highlighting the AMA’s significant impact on market sentiment.
+              In our prediction market, community members propose topics they find intriguing, sparking a dynamic environment where users bet on outcomes by choosing to support or oppose each scenario. For example, participants can wager on whether gold prices will rise or fall. This transparent and decentralized approach not only enhances engagement and encourages diverse opinions, but also builds trust and delivers more accurate, crowd-sourced forecasts that reflect the collective sentiment of the community.
             </AccordionContent>
           </AccordionItem>
         </Accordion>

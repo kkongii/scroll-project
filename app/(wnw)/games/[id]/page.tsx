@@ -6,14 +6,14 @@ import { Badge } from '@/components/ui/badge';
 export default function page() {
   return (
     <div className="mt-10 space-y-6 p-4 md:p-8 overflow-y-auto">
-      <h1 className="mb-5 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-3xl">
-        BNB Price Up and Down
+      <h1 className="mb-5 scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-3xl text-black">
+        Scroll Price Up and Down
       </h1>
 
       <div className="flex space-x-6">
         <Badge className="text-xs bg-[#575757] text-F7F8F8 rounded-3xl p-1.5 px-5">~ 24.08.30</Badge>
         <Badge className="text-xs bg-[#575757] text-F7F8F8 rounded-3xl p-1.5 px-5">AMA</Badge>
-        <Badge className="text-xs bg-[#575757] text-F7F8F8 rounded-3xl p-1.5 px-5">BNB</Badge>
+        <Badge className="text-xs bg-[#575757] text-F7F8F8 rounded-3xl p-1.5 px-5">Scroll</Badge>
       </div>
 
       <div className="flex space-x-8 h-full">

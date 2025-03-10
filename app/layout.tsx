@@ -20,38 +20,26 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/*
-        1) body에 배경색 지정: bg-[#faf3e0]
-        2) flex 레이아웃 유지
-      */}
-      <body className={`${inter.className} overflow-x-hidden overflow-y-scroll bg-[#faf3e0]`}>
+      <body
+        className={`${inter.className} overflow-x-hidden overflow-y-scroll min-h-screen`}
+        style={{
+          backgroundImage: 'url("/c.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <NextTopLoader />
         <Providers>
           <Toaster />
-          {/* 3) 3열 레이아웃: 왼쪽 이미지 | 가운데 children | 오른쪽 이미지 */}
-          <div className="md:flex w-full min-h-screen">
-            {/* 왼쪽 이미지 영역 */}
-            <div className="hidden md:flex w-1/6 items-center justify-center">
-              <img
-                src="/zkevm2.png"
-                alt="Left Decoration"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-
-            {/* 메인 콘텐츠 (children) */}
-            <main className="flex-1">
+          {/* 
+            화면 전체를 flex 컨테이너로 만들고,
+            min-h-screen을 줘서 배경이 항상 채워지도록 함 
+          */}
+          <div className="flex w-full min-h-screen">
+            <main className="flex-1 flex items-center justify-center gap-4">
               {children}
             </main>
-
-            {/* 오른쪽 이미지 영역 */}
-            <div className="hidden md:flex w-1/6 items-center justify-center">
-              <img
-                src="/robot.png"
-                alt="Right Decoration"
-                className="w-full h-auto object-contain"
-              />
-            </div>
           </div>
         </Providers>
       </body>
