@@ -5,7 +5,7 @@ import { Button } from '../ui/button';
 
 export default function Header() {
   return (
-    <div className="supports-backdrop-blur:bg-background/60 fixed left-0 right-0 top-0 z-20 border-b bg-background/95 backdrop-blur">
+    <div className="fixed left-0 right-0 top-0 z-20 border-b bg-[#f5e7d0]">
       <nav className="ml-20 mr-20 flex h-20 items-center justify-between px-4">
         <div className="flex items-center space-x-1">
           <Link href={'/'}>

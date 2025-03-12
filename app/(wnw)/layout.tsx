@@ -3,15 +3,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Wise and Weird',
-  description: 'Wise and Weird - Prediction Market',
-  twitter: {
-    card: 'summary',
-    site: '@web3BlueNode',
-    title: 'Wise and Weird',
-    description:
-      'Predict price movement and profit from the community powered official events, making precise decisions',
-    images: 'https://bnb-wnw.online/twitter-img.png'
-  }
+  description: 'Wise and Weird - Prediction Market'
 };
 
 export default function DashboardLayout({
@@ -22,8 +14,10 @@ export default function DashboardLayout({
   return (
     <>
       <Header />
-      <div className="flex h-screen overflow-hidden">
-        <main className="flex-1 overflow-hidden pt-20">
+      {/* 배경색과 최소 높이 설정 */}
+      <div className="min-h-screen bg-[#faf3e0]">
+        {/* 만약 헤더 높이만큼 공간을 띄워주려면 pt-20 유지 */}
+        <main className="pt-20">
           <div className="container relative">{children}</div>
         </main>
       </div>

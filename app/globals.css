@@ -2,10 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================
+   1) 기본 컬러 변수 설정
+   ========================= */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* 
+      기존: --background: 0 0% 100%; 
+      변경: 스크롤 페이지 느낌의 크림색 → #FAF3E0 (HSL로 45 66% 93%) 
+    */
+    --background: 45 66% 93%;
+    /*
+      기존: --foreground: 240 10% 3.9%; 
+      변경: 더 어두운 전경색(텍스트) → #333 (HSL로 0 0% 20%)
+    */
+    --foreground: 0 0% 20%;
 
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -35,6 +46,10 @@
     --radius: 0.5rem;
   }
 
+  /* 
+    다크 모드 색상 
+    (원하시면 이 부분도 다른 톤으로 수정 가능)
+  */
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -66,15 +81,24 @@
   }
 }
 
+/* =========================
+   2) 기본 스타일 지정
+   ========================= */
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply box-border bg-background text-foreground;
+
+    margin: 0;
+    padding: 0;
   }
 }
 
+/* =========================
+   3) 유틸리티 클래스 확장
+   ========================= */
 @layer utilities {
   .min-h-screen {
     min-height: 100vh; /* Fallback */
@@ -85,6 +109,10 @@
     height: 100dvh;
   }
 }
+
+/* =========================
+   4) 차트용 컬러 변수
+   ========================= */
 @layer base {
   :root {
     --chart-1: 12 76% 61%;

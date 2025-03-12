@@ -3,15 +3,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function page() {
   return (
-    <div className="mt-10 space-y-6 p-4 md:p-8 overflow-y-scroll h-full max-h-[calc(100vh-100px)]">
-      <h2 className="scroll-m-20 text-4xl font-bold tracking-tight lg:text-3xl">
-      WnW ; Win with the wises 
+    // 상단에 패딩 10(px 단위 아님) → mt-10과 유사
+    <div className="bg-[#faf3e0] text-black ">
+      <h2 className="scroll-m-20 pt-10 text-4xl font-bold tracking-tight lg:text-3xl">
+        Future Scroll
       </h2>
       <h1 className="mb-20 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-      Get precise news and predict the price
+        Get started with scroll!
       </h1>
       <div>
-        <GameList/>
+        <GameList />
       </div>
     </div>
   );
