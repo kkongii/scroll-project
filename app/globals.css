@@ -7,16 +7,13 @@
    ========================= */
 @layer base {
   :root {
-    /* 
-      기존: --background: 0 0% 100%; 
-      변경: 스크롤 페이지 느낌의 크림색 → #FAF3E0 (HSL로 45 66% 93%) 
-    */
+    /* 배경: 크림색 (#FAF3E0) */
     --background: 45 66% 93%;
     /*
-      기존: --foreground: 240 10% 3.9%; 
-      변경: 더 어두운 전경색(텍스트) → #333 (HSL로 0 0% 20%)
+      기본 전경색(텍스트): 검정색 → HSL: 0 0% 0%
+      (기존: 0 0% 20% → #333)
     */
-    --foreground: 0 0% 20%;
+    --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -46,13 +43,10 @@
     --radius: 0.5rem;
   }
 
-  /* 
-    다크 모드 색상 
-    (원하시면 이 부분도 다른 톤으로 수정 가능)
-  */
+  /* 다크 모드 색상 (다크 모드에서도 텍스트를 검정색으로 사용하려면 수정하세요) */
   .dark {
     --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --foreground: 0 0% 0%; /* 다크 모드에서도 검정 텍스트 사용 */
 
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -129,4 +123,11 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+}
+
+.bg-custom {
+  background-image: url('/c.png');
+  background-size: cover;       /* 화면 전체에 맞게 조절 */
+  background-position: center;  /* 중앙 정렬 */
+  background-repeat: no-repeat; /* 반복 방지 */
 }
