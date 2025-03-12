@@ -158,7 +158,7 @@ const WNW_ABI = [
 	},
 	{
 		"inputs": [],
-		"name": "depositBNB",
+		"name": "depositScroll",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
@@ -710,7 +710,7 @@ const WNW_ABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "withdrawBNB",
+		"name": "withdrawScroll",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

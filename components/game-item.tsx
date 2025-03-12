@@ -82,7 +82,7 @@ export const GameItem = ({ game }: any) => {
             <div className="flex-1 space-y-2">
               <div className="flex items-center justify-end text-xs text-zinc-400">
                 total amount :{' '}
-                {(Number(game.prizeAmount) / 10 ** 18).toFixed(2)} BNB{' '}
+                {(Number(game.prizeAmount) / 10 ** 18).toFixed(2)} SCROLL{' '}
               </div>
               <div className="flex justify-between">
                 <p className="text-sm text-green-700">UP</p>
