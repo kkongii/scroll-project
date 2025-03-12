@@ -2,8 +2,8 @@ import Header from '@/components/layout/header';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Wise and Weird',
-  description: 'Wise and Weird - Prediction Market'
+  title: 'Future Scroll',
+  description: 'Future Scroll - Prediction Market'
 };
 
 export default function DashboardLayout({

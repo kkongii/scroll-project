@@ -60,7 +60,7 @@ export const GameItem = ({ game }: any) => {
 
   return (
     <div key={game.gameId}>
-      <Card className="my-4 w-96 max-w-sm cursor-pointer hover:shadow-lg">
+      <Card className="my-4 w-72 max-w-sm cursor-pointer hover:shadow-lg">
         <CardHeader>
           <CardTitle className="mb-4 flex">
             <Image

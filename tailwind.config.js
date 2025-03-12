@@ -1,3 +1,5 @@
+const { url } = require('inspector');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
@@ -11,7 +13,6 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: '2rem',
       screens: {
         '2xl': '1400px'
       }
@@ -48,8 +49,12 @@ module.exports = {
           foreground: 'hsl(var(--popover-foreground))'
         },
         card: {
-          DEFAULT:  '#ffffff',
+          DEFAULT: '#ffffff',
           foreground: '#000000'
+        },
+        backgroundImage: {
+          leftimg: "url('./public/zkevm2.png')",
+          rightimg: "url('./public/robot.png')"
         }
       },
       borderRadius: {
