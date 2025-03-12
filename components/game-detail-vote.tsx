@@ -50,7 +50,7 @@ export function GameDetailVote() {
 
   useEffect(() => {
     if (game) {
-      const startPrice = Number(game.startPrice);
+      const startPrice = Number(game.startPrice) / 10 ** 18;
 
       const initialPriceChange = (Math.random() * 3 - 1) * 0.01;
       const initialPrice = Math.max(startPrice * (1 + initialPriceChange), 0);
@@ -163,7 +163,7 @@ export function GameDetailVote() {
   };
 
   return (
-    <Card className="mx-auto grid w-full max-w-sm gap-8 border-none text-black">
+    <Card className="mx-auto grid w-full max-w-sm border-none text-black">
       <CardHeader className="max-h-auto mx-auto w-full max-w-sm rounded-xl bg-white p-6 text-black">
         <CardTitle className="flex gap-2">
           <div className="text-lg">Pool status</div>
@@ -229,7 +229,7 @@ export function GameDetailVote() {
             <div className="font-bold">
               Started: ${' '}
               {game.startPrice
-                ? `${Number(game.startPrice).toFixed(2)}`
+                ? `${(Number(game.startPrice) / 10 ** 18).toFixed(2)}`
                 : 'Loading...'}
             </div>
             <div className=" text-end text-xs">

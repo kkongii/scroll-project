@@ -15,7 +15,7 @@ export default function DashboardLayout({
     <>
       <Header />
       {/* 배경색과 최소 높이 설정 */}
-      <div className="min-h-screen bg-[#faf3e0]">
+      <div className="min-h-screen w-3/4 bg-transparent">
         {/* 만약 헤더 높이만큼 공간을 띄워주려면 pt-20 유지 */}
         <main className="pt-20">
           <div className="container relative">{children}</div>

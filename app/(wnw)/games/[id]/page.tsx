@@ -5,9 +5,9 @@ import { Badge } from '@/components/ui/badge';
 
 export default function page() {
   return (
-    <div className="mt-10 space-y-6 overflow-y-auto p-4 md:p-8">
-      <h1 className="mb-5 scroll-m-20 text-3xl font-extrabold tracking-tight text-black lg:text-3xl">
-        Scroll Price Up and Down
+    <div className="mt-10 space-y-6 overflow-y-auto">
+      <h1 className="mb-5 scroll-m-20 text-3xl font-extrabold tracking-tight text-red-500 lg:text-3xl">
+        EthRunner Price Up down
       </h1>
 
       <div className="flex space-x-6">
@@ -28,7 +28,7 @@ export default function page() {
           <GameDetailComment />
         </div>
 
-        <div className="h-full w-1/3 space-y-4 overflow-y-auto pl-2">
+        <div className="h-full w-1/2">
           <GameDetailVote />
         </div>
       </div>
