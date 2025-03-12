@@ -234,7 +234,7 @@ export function GameDetailVote() {
             </div>
             <div className=" text-end text-xs">
               <div>Total Pool Amount:</div>
-              <div>{Number(totalPoolAmount) / 10 ** 18} BNB</div>
+              <div>{Number(totalPoolAmount) / 10 ** 18}Scroll</div>
             </div>
           </div>
         </div>
@@ -367,13 +367,13 @@ export function GameDetailVote() {
           />
 
           <Image
-            src="https://assets.coingecko.com/coins/images/825/standard/bnb-icon2_2x.png?1696501970"
+            src="https://assets.coingecko.com/coins/images/50571/standard/scroll.jpg?1728376125"
             alt="Logo"
             width={25}
             height={25}
             className="mr-0"
           />
-          <span className=" text-xl font-bold text-black">BNB</span>
+          <span className=" text-xl font-bold text-black">Scroll</span>
         </div>
         <button
           className={`h-[55px] w-[335px] rounded-2xl font-semibold text-white shadow-md transition-transform duration-75 focus:outline-none ${
