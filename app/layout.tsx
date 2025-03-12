@@ -6,7 +6,6 @@ import NextTopLoader from 'nextjs-toploader';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Image from 'next/image';
-import Image from 'next/image';
 
 const inter = Inter({ subsets: ['latin'] });
 
