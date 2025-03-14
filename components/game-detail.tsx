@@ -18,7 +18,7 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion';
 
-const WNW_PRECOMPILE_ADDRESS = '0x7c6960cbb510c2e3add2a126a275a85ef2768e81';
+const WNW_PRECOMPILE_ADDRESS = '0x8b6eC36dB2Cc17D3b16D52DdA334238F24EE7Ed6';
 
 export const GameDetail = () => {
   const params = useParams();

@@ -8,7 +8,8 @@ export default function Header() {
       <nav className="ml-20 mr-20 flex h-20 items-center justify-between px-4">
         <div className="flex items-center space-x-1">
           <Link href={'/'}>
-            <a className="font-bold text-3xl">Future Scroll</a> {/* 이미지 대신 추가된 텍스트 링크 */}
+            <div className="text-3xl font-bold">Future Scroll</div>{' '}
+            {/* 이미지 대신 추가된 텍스트 링크 */}
           </Link>
           <Link href={'/'}>
             <Button className="w-30 ml-7 h-8 font-semibold" variant="ghost">
