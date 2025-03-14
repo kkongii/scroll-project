@@ -1,15 +1,15 @@
 import { createConfig, http } from 'wagmi';
 
-import { bscTestnet } from 'wagmi/chains';
+import { scrollSepolia } from 'wagmi/chains';
 import { metaMask } from 'wagmi/connectors';
 
 export const config = createConfig({
-  chains: [bscTestnet],
+  chains: [scrollSepolia],
   connectors: [metaMask()],
   ssr: true,
   multiInjectedProviderDiscovery: false,
   transports: {
-    [bscTestnet.id]: http()
+    [scrollSepolia.id]: http()
   }
 });
 

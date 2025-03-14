@@ -20,24 +20,15 @@ import Image from 'next/image';
 import { tokenInfos } from '@/constants';
 
 export function GameDetailVote() {
-  const WNW_PRECOMPILE_ADDRESS = '0x8b6eC36dB2Cc17D3b16D52DdA334238F24EE7Ed6';
+  const WNW_PRECOMPILE_ADDRESS = '0x7c6960cbb510c2e3add2a126a275a85ef2768e81';
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
   const [currentPrice, setCurrentPrice] = useState<number | null>(null);
   const [betUp, setBetUp] = useState<boolean | null>(null); // Up/Down 선택 상태
   const [amount, setAmount] = useState(''); // Input 필드에 입력된 숫자
   const [clicked, setClicked] = useState(false);
-  const url = 'https://bnb-wnw.online/';
-  const text = `ADF referral share ${url}`;
-  const encodedText = encodeURIComponent(text);
-  const encodedUrl = encodeURIComponent(url);
 
-  const shareTwitter = () => {
-    const via = 'Wise and Weird';
-    const hashtags = 'Prediction,Price,BNB,BSC';
-    const shareUrl = `https://twitter.com/intent/tweet?url=${encodedUrl}&via=${via}&hashtags=${hashtags}`;
-    window.open(shareUrl, '_blank');
-  };
+  const shareTwitter = () => {};
 
   const { data: game }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,
@@ -50,7 +41,7 @@ export function GameDetailVote() {
 
   useEffect(() => {
     if (game) {
-      const startPrice = Number(game.startPrice) / 10 ** 18;
+      const startPrice = Number(game.startPrice);
 
       const initialPriceChange = (Math.random() * 3 - 1) * 0.01;
       const initialPrice = Math.max(startPrice * (1 + initialPriceChange), 0);
@@ -229,12 +220,12 @@ export function GameDetailVote() {
             <div className="font-bold">
               Started: ${' '}
               {game.startPrice
-                ? `${(Number(game.startPrice) / 10 ** 18).toFixed(2)}`
+                ? `${Number(game.startPrice).toFixed(2)}`
                 : 'Loading...'}
             </div>
             <div className=" text-end text-xs">
               <div>Total Pool Amount:</div>
-              <div>{Number(totalPoolAmount) / 10 ** 18}Scroll</div>
+              <div>{Number(totalPoolAmount) / 10 ** 18}SCR</div>
             </div>
           </div>
         </div>
@@ -373,7 +364,7 @@ export function GameDetailVote() {
             height={25}
             className="mr-0"
           />
-          <span className=" text-xl font-bold text-black">Scroll</span>
+          <span className=" text-xl font-bold text-black">SCR</span>
         </div>
         <button
           className={`h-[55px] w-[335px] rounded-2xl font-semibold text-white shadow-md transition-transform duration-75 focus:outline-none ${
