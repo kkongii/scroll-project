@@ -57,14 +57,6 @@ export function GameDetailVote() {
     }
   }, [game]);
 
-  useEffect(() => {
-    // 컴포넌트가 마운트될 때 로컬 스토리지에서 상태 로드
-    const storedState = localStorage.getItem(`buttonClicked_${key}`);
-    if (storedState === 'true') {
-      setClicked(true);
-    }
-  }, [game]);
-
   const { writeContract } = useWriteContract();
 
   const handleBet = async () => {
