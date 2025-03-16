@@ -19,7 +19,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScheduleItem } from './schedule-item';
 
-const WNW_PRECOMPILE_ADDRESS = '0x6409Da29FdC3441679Ca0d62e5F1f365b915490B';
+const WNW_PRECOMPILE_ADDRESS = '0x97733c0658e7940D49AFABe344Acd5D6FEeDc7cc';
 export const ScheduleList = () => {
   const { data: allGames }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,

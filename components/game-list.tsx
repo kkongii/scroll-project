@@ -3,7 +3,7 @@ import { useReadContract } from 'wagmi';
 import WNW_ABI from '@/abi/IWNW.abi';
 import { GameItem } from './game-item';
 
-const WNW_PRECOMPILE_ADDRESS = '0x6409Da29FdC3441679Ca0d62e5F1f365b915490B';
+const WNW_PRECOMPILE_ADDRESS = '0x97733c0658e7940D49AFABe344Acd5D6FEeDc7cc';
 export const GameList = () => {
   const { data: allGames }: any = useReadContract({
     address: WNW_PRECOMPILE_ADDRESS,

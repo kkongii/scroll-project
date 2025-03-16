@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useReadContract } from 'wagmi';
 
-const WNW_PRECOMPILE_ADDRESS = '0x6409Da29FdC3441679Ca0d62e5F1f365b915490B';
+const WNW_PRECOMPILE_ADDRESS = '0x97733c0658e7940D49AFABe344Acd5D6FEeDc7cc';
 
 export default function GamePage() {
   const [gameTitle, setGameTitle] = useState('');

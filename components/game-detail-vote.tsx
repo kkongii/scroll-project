@@ -20,7 +20,7 @@ import Image from 'next/image';
 import { tokenInfos } from '@/constants';
 
 export function GameDetailVote() {
-  const WNW_PRECOMPILE_ADDRESS = '0x6409Da29FdC3441679Ca0d62e5F1f365b915490B';
+  const WNW_PRECOMPILE_ADDRESS = '0x97733c0658e7940D49AFABe344Acd5D6FEeDc7cc';
   const searchParams = useSearchParams();
   const key = searchParams.get('key');
   const [currentPrice, setCurrentPrice] = useState<number | null>(null);
