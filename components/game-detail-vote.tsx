@@ -367,7 +367,7 @@ export function GameDetailVote() {
           onClick={handleBet}
           disabled={clicked}
         >
-          {game.isEnded ? 'Game Ended' : clicked ? 'Not ended' : 'Confirm'}
+          {clicked ? 'Not ended' : 'Confirm'}
         </button>
       </CardContent>
       <button
